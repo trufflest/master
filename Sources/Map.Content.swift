@@ -1,8 +1,9 @@
 extension Map {
-    public enum Content {
+    public enum Content: Hashable {
         case
         empty,
         ground,
-        cornelius
+        cornelius,
+        foe(Int)
     }
 }
