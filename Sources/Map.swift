@@ -1,33 +1,81 @@
 import SpriteKit
+import Combine
 
-public struct Map {
-    var characters: [Content : (Int, Int)]
-    let area: [[Content]]
+public final class Map {
+    public let move = PassthroughSubject<CGPoint, Never>()
+    public let face = PassthroughSubject<Face, Never>()
+    public let over = PassthroughSubject<Over, Never>()
+    public let jumpClear = PassthroughSubject<Void, Never>()
+    public let jumpConsume = PassthroughSubject<Void, Never>()
+    var characters: [Character : (x: Int, y: Int)]
+    let area: [[Bool]]
     private let size: CGFloat
     
     init(ground: SKTileMapNode) {
         size = ground.tileSize.width
         area = (0 ..< ground.numberOfColumns).map { x in
             (0 ..< ground.numberOfRows).map { y in
-                ground.tileDefinition(atColumn: x, row: y) == nil ? .empty : .ground
+                ground.tileDefinition(atColumn: x, row: y) != nil
             }
         }
         
         var y = 0
         let x = 2
         
-        while area[x][y] == .ground {
+        while area[x].count > y + 1, area[x][y + 1] {
             y += 1
         }
         
         characters = [.cornelius : (x, y)]
     }
     
-    public subscript(_ content: Content) -> CGPoint {
-        characters[content]
-            .map {
-                .init(x: .init($0.0) * size, y: .init($0.1) * size)
+    public func update(jumping: Jumping, walking: Walking) {
+        let position = characters[.cornelius]!
+        
+        switch jumping {
+        case .none:
+            if area[position.x][position.y] {
+                if walking == .none {
+                    face.send(.none)
+                }
+            } else {
+                gravity(position: position)
             }
-        ?? .zero
+            
+            jumpClear.send()
+        case .start:
+            if area[position.x][position.y] {
+                face.send(.jump)
+                move(x: position.x, y: position.y + 1)
+                jumpConsume.send()
+            } else {
+                gravity(position: position)
+            }
+        default:
+            if area[position.x][position.y + 1] {
+                jumpClear.send()
+            } else {
+                move(x: position.x, y: position.y + 1)
+                jumpConsume.send()
+            }
+        }
+    }
+    
+    public subscript(_ character: Character) -> CGPoint {
+        .init(x: .init(characters[character]!.x) * size,
+              y: .init(characters[character]!.y) * size)
+    }
+    
+    private func gravity(position: (x: Int, y: Int)) {
+        move(x: position.x, y: position.y - 1)
+        
+        if characters[.cornelius]!.y < 2 {
+            over.send(.fell)
+        }
+    }
+    
+    private func move(x: Int, y: Int) {
+        characters[.cornelius] = (x: x, y: y)
+        move.send(self[.cornelius])
     }
 }
