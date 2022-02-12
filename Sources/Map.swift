@@ -130,9 +130,11 @@ public final class Map {
     private func gravity(y: Int) {
         let next = y - 1
         
-        if next < 0 {
+        if next < 1 {
             state.send(.fell)
-        } else {
+        }
+        
+        if next >= 0 {
             move(y: next)
         }
     }
