@@ -106,10 +106,12 @@ public final class Map {
     }
     
     private func gravity(position: (x: Int, y: Int)) {
-        move(x: position.x, y: position.y - 1)
+        let fall = position.y - 1
         
-        if characters[.cornelius]!.y < 2 {
+        if fall < 2 {
             over.send(.fell)
+        } else {
+            move(x: position.x, y: fall)
         }
     }
     

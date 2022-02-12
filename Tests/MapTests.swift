@@ -85,12 +85,31 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .none, walking: .none, face: .none, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
+    }
+    
+    func testFallingEdge() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 2)
+        
+        map
+            .move
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .none, face: .none, direction: .right)
+        
+        waitForExpectations(timeout: 0.1)
     }
     
     func testOverFell() {
-        let expectFace = expectation(description: "")
-        let expectJumping = expectation(description: "")
+        let expectOver = expectation(description: "a")
+        let expectJumping = expectation(description: "b")
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 2)
@@ -99,7 +118,7 @@ final class MapTests: XCTestCase {
             .over
             .sink {
                 XCTAssertEqual(.fell, $0)
-                expectFace.fulfill()
+                expectOver.fulfill()
             }
             .store(in: &subs)
         
@@ -113,7 +132,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .none, walking: .none, face: .none, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testGrounding() {
@@ -143,7 +162,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .none, walking: .none, face: .walk1, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testJump() {
@@ -182,7 +201,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .start, walking: .none, face: .none, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testOnTheUp() {
@@ -210,7 +229,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .second, walking: .none, face: .none, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testUpStop() {
@@ -231,7 +250,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .second, walking: .none, face: .none, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testWalkingLeft() {
@@ -271,7 +290,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .none, walking: .left, face: .walk1, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testWalkingLeftEdge() {
@@ -293,7 +312,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .none, walking: .left, face: .walk1, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testWalkingRight() {
@@ -333,7 +352,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .none, walking: .right, face: .walk1, direction: .left)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testWalkingRightEdge() {
@@ -355,7 +374,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .none, walking: .right, face: .walk1, direction: .left)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testWalkingLeft2() {
@@ -380,7 +399,7 @@ final class MapTests: XCTestCase {
         map.update(jumping: .none, walking: .left, face: .walk2, direction: .right)
         map.update(jumping: .none, walking: .left, face: .none, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testWalkingLeftJumping() {
@@ -403,7 +422,7 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .none, walking: .left, face: .jump, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testWalkingRight2() {
@@ -428,7 +447,7 @@ final class MapTests: XCTestCase {
         map.update(jumping: .none, walking: .right, face: .walk2, direction: .left)
         map.update(jumping: .none, walking: .right, face: .none, direction: .left)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
     
     func testWalkingRightJumping() {
@@ -450,6 +469,6 @@ final class MapTests: XCTestCase {
         
         map.update(jumping: .none, walking: .right, face: .jump, direction: .right)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 0.1)
     }
 }
