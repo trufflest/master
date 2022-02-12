@@ -83,7 +83,8 @@ public final class Map {
                         walk(face: face)
                     }
                     
-                    if position.x > 2 {
+                    if position.x > 2,
+                       !area[position.x - 1][position.y + 1] {
                         move(x: position.x - 1)
                     }
                 }
@@ -99,7 +100,8 @@ public final class Map {
                         walk(face: face)
                     }
                     
-                    if position.x < area.count - 2 {
+                    if position.x < area.count - 2,
+                       !area[position.x + 1][position.y + 1] {
                         move(x: position.x + 1)
                     }
                 }

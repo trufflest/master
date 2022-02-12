@@ -603,4 +603,50 @@ final class MapTests: XCTestCase {
         
         waitForExpectations(timeout: 0.1)
     }
+    
+    func testWalkingLeftCollision() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 6)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (6, 5)
+        
+        map
+            .moveX
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .left, face: .walk1, direction: .left)
+        
+        waitForExpectations(timeout: 0.1)
+    }
+    
+    func testWalkingRightCollision() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 6)
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 5)
+        
+        map
+            .moveX
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .right, face: .walk1, direction: .right)
+        
+        waitForExpectations(timeout: 0.1)
+    }
 }
