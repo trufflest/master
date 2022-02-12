@@ -25,9 +25,9 @@ public final class Map {
         }
         
         var y = 0
-        let x = 2
+        let x = 3
         
-        while area[x].count > y + 1, area[x][y + 1] {
+        while area[x].count > y + 1, area[x][y] {
             y += 1
         }
         

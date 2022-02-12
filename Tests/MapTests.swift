@@ -55,18 +55,12 @@ final class MapTests: XCTestCase {
     }
     
     func testOrigin() {
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 0, row: 0)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 0, row: 1)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 0, row: 2)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 1, row: 0)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 1, row: 1)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 1, row: 2)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 2, row: 0)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 2, row: 1)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 2, row: 2)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 0)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 1)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 2)
         
         map.load(ground: ground)
-        XCTAssertEqual(.init(x: 64, y: 64), map[.cornelius])
+        XCTAssertEqual(.init(x: 96, y: 96), map[.cornelius])
     }
     
     func testFalling() {
