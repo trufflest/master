@@ -265,6 +265,90 @@ final class MapTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
+    func testWalkingLeftEdge() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 0, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 1, row: 5)
+        
+        let map = Map(ground: ground)
+        map.characters[.cornelius] = (1, 5)
+        
+        map
+            .move
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .left, face: .walk1, direction: .right)
+        
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testWalkingRight() {
+        let expectFace = expectation(description: "")
+        let expectDirection = expectation(description: "")
+        let expectMove = expectation(description: "")
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        
+        let map = Map(ground: ground)
+        map.characters[.cornelius] = (5, 5)
+        
+        map
+            .face
+            .sink {
+                XCTAssertEqual(.walk2, $0)
+                expectFace.fulfill()
+            }
+            .store(in: &subs)
+        
+        map
+            .direction
+            .sink {
+                XCTAssertEqual(.right, $0)
+                expectDirection.fulfill()
+            }
+            .store(in: &subs)
+        
+        map
+            .move
+            .sink {
+                XCTAssertEqual(.init(x: 32 * 6, y: 32 * 5), $0)
+                expectMove.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .right, face: .walk1, direction: .left)
+        
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testWalkingRightEdge() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 198, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 199, row: 5)
+        
+        let map = Map(ground: ground)
+        map.characters[.cornelius] = (198, 5)
+        
+        map
+            .move
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .right, face: .walk1, direction: .left)
+        
+        waitForExpectations(timeout: 1)
+    }
+    
     func testWalkingLeft2() {
         let expect = expectation(description: "")
         expect.expectedFulfillmentCount = 2

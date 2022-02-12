@@ -66,8 +66,7 @@ public final class Map {
             }
         }
         
-        switch walking {
-        case .left:
+        if walking != .none {
             
             switch face {
             case .walk1:
@@ -78,14 +77,23 @@ public final class Map {
                 break
             }
             
-            if direction == .right {
-                self.direction.send(.left)
+            if walking == .left {
+                if direction == .right {
+                    self.direction.send(.left)
+                }
+                
+                if position.x > 1 {
+                    move(x: position.x - 1, y: position.y)
+                }
+            } else {
+                if direction == .left {
+                    self.direction.send(.right)
+                }
+                
+                if position.x < area.count - 2 {
+                    move(x: position.x + 1, y: position.y)
+                }
             }
-            
-            move(x: position.x - 1, y: position.y)
-            
-        default:
-            break
         }
     }
     
