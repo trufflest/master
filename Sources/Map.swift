@@ -54,8 +54,8 @@ public final class Map {
             self.jumping.send(.start)
         case .start:
             if area[position.x][position.y] {
+                flying(position: position)
                 self.face.send(.jump)
-                move(x: position.x, y: position.y + 1)
                 self.jumping.send(jumping.next)
             } else {
                 gravity(position: position)
@@ -64,7 +64,7 @@ public final class Map {
             if area[position.x][position.y + 1] {
                 self.jumping.send(.start)
             } else {
-                move(x: position.x, y: position.y + 1)
+                flying(position: position)
                 self.jumping.send(jumping.next)
             }
         }
@@ -105,13 +105,21 @@ public final class Map {
               y: .init(characters[character]!.y) * size)
     }
     
-    private func gravity(position: (x: Int, y: Int)) {
-        let fall = position.y - 1
+    private func flying(position: (x: Int, y: Int)) {
+        let next = position.y + 1
         
-        if fall < 2 {
+        if next < area.first!.count - 2 {
+            move(x: position.x, y: next)
+        }
+    }
+    
+    private func gravity(position: (x: Int, y: Int)) {
+        let next = position.y - 1
+        
+        if next < 2 {
             state.send(.fell)
         } else {
-            move(x: position.x, y: fall)
+            move(x: position.x, y: next)
         }
     }
     

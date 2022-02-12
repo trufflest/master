@@ -232,6 +232,46 @@ final class MapTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
     
+    func testJumpEdge() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 97)
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 97)
+        
+        map
+            .move
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .start, walking: .none, face: .none, direction: .right)
+        
+        waitForExpectations(timeout: 0.1)
+    }
+    
+    func testOnTheAirEdge() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 97)
+        
+        map
+            .move
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .second, walking: .none, face: .none, direction: .right)
+        
+        waitForExpectations(timeout: 0.1)
+    }
+    
     func testUpStop() {
         let expect = expectation(description: "")
         
