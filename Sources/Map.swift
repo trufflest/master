@@ -79,7 +79,9 @@ public final class Map {
                         self.face.send(.none)
                     }
                 } else {
-                    walk(face: face)
+                    if area[position.x][position.y] {
+                        walk(face: face)
+                    }
                     
                     if position.x > 2 {
                         move(x: position.x - 1)
@@ -93,7 +95,9 @@ public final class Map {
                         self.face.send(.none)
                     }
                 } else {
-                    walk(face: face)
+                    if area[position.x][position.y] {
+                        walk(face: face)
+                    }
                     
                     if position.x < area.count - 2 {
                         move(x: position.x + 1)

@@ -449,6 +449,44 @@ final class MapTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
     
+    func testWalkingRightNoGround() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 5)
+        
+        map
+            .face
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .right, face: .walk1, direction: .right)
+        
+        waitForExpectations(timeout: 0.1)
+    }
+    
+    func testWalkingLeftNoGround() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 5)
+        
+        map
+            .face
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .left, face: .walk1, direction: .left)
+        
+        waitForExpectations(timeout: 0.1)
+    }
+    
     func testWalkingRightEdge() {
         let expect = expectation(description: "")
         expect.isInverted = true
