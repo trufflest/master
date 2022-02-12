@@ -115,7 +115,7 @@ final class MapTests: XCTestCase {
         map.characters[.cornelius] = (5, 2)
         
         map
-            .over
+            .state
             .sink {
                 XCTAssertEqual(.fell, $0)
                 expectOver.fulfill()

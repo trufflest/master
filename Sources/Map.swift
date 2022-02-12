@@ -4,7 +4,7 @@ import Combine
 public final class Map {
     public let move = PassthroughSubject<CGPoint, Never>()
     public let face = PassthroughSubject<Face, Never>()
-    public let over = PassthroughSubject<Over, Never>()
+    public let state = PassthroughSubject<State, Never>()
     public let direction = PassthroughSubject<Direction, Never>()
     public let jumping = PassthroughSubject<Jumping, Never>()
     
@@ -109,7 +109,7 @@ public final class Map {
         let fall = position.y - 1
         
         if fall < 2 {
-            over.send(.fell)
+            state.send(.fell)
         } else {
             move(x: position.x, y: fall)
         }
