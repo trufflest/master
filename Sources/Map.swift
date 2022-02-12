@@ -6,8 +6,7 @@ public final class Map {
     public let face = PassthroughSubject<Face, Never>()
     public let over = PassthroughSubject<Over, Never>()
     public let direction = PassthroughSubject<Direction, Never>()
-    public let jumpClear = PassthroughSubject<Void, Never>()
-    public let jumpConsume = PassthroughSubject<Void, Never>()
+    public let jumping = PassthroughSubject<Jumping, Never>()
     
     var characters: [Character : (x: Int, y: Int)]
     let area: [[Bool]]
@@ -48,21 +47,21 @@ public final class Map {
                 gravity(position: position)
             }
             
-            jumpClear.send()
+            self.jumping.send(.start)
         case .start:
             if area[position.x][position.y] {
                 self.face.send(.jump)
                 move(x: position.x, y: position.y + 1)
-                jumpConsume.send()
+                self.jumping.send(jumping.next)
             } else {
                 gravity(position: position)
             }
         default:
             if area[position.x][position.y + 1] {
-                jumpClear.send()
+                self.jumping.send(.start)
             } else {
                 move(x: position.x, y: position.y + 1)
-                jumpConsume.send()
+                self.jumping.send(jumping.next)
             }
         }
         

@@ -86,7 +86,7 @@ final class MapTests: XCTestCase {
     
     func testOverFell() {
         let expectFace = expectation(description: "")
-        let expectClear = expectation(description: "")
+        let expectJumping = expectation(description: "")
         
         let map = Map(ground: ground)
         map.characters[.cornelius] = (5, 2)
@@ -100,9 +100,10 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .jumpClear
+            .jumping
             .sink {
-                expectClear.fulfill()
+                XCTAssertEqual(.start, $0)
+                expectJumping.fulfill()
             }
             .store(in: &subs)
         
@@ -113,7 +114,7 @@ final class MapTests: XCTestCase {
     
     func testGrounding() {
         let expectFace = expectation(description: "")
-        let expectClear = expectation(description: "")
+        let expectJumping = expectation(description: "")
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 2)
         
@@ -129,9 +130,10 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .jumpClear
+            .jumping
             .sink {
-                expectClear.fulfill()
+                XCTAssertEqual(.start, $0)
+                expectJumping.fulfill()
             }
             .store(in: &subs)
         
@@ -143,7 +145,7 @@ final class MapTests: XCTestCase {
     func testJump() {
         let expectFace = expectation(description: "")
         let expectMove = expectation(description: "")
-        let expectConsume = expectation(description: "")
+        let expectJumping = expectation(description: "")
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 2)
         
@@ -167,9 +169,10 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .jumpConsume
+            .jumping
             .sink {
-                expectConsume.fulfill()
+                XCTAssertEqual(.first, $0)
+                expectJumping.fulfill()
             }
             .store(in: &subs)
         
@@ -180,7 +183,7 @@ final class MapTests: XCTestCase {
     
     func testOnTheUp() {
         let expectMove = expectation(description: "")
-        let expectConsume = expectation(description: "")
+        let expectJumping = expectation(description: "")
         
         let map = Map(ground: ground)
         map.characters[.cornelius] = (5, 2)
@@ -194,9 +197,10 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .jumpConsume
+            .jumping
             .sink {
-                expectConsume.fulfill()
+                XCTAssertEqual(.third, $0)
+                expectJumping.fulfill()
             }
             .store(in: &subs)
         
@@ -214,8 +218,9 @@ final class MapTests: XCTestCase {
         map.characters[.cornelius] = (5, 2)
         
         map
-            .jumpClear
+            .jumping
             .sink {
+                XCTAssertEqual(.start, $0)
                 expect.fulfill()
             }
             .store(in: &subs)
