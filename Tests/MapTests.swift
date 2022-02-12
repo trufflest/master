@@ -70,9 +70,9 @@ final class MapTests: XCTestCase {
         map.characters[.cornelius] = (5, 5)
         
         map
-            .move
+            .moveY
             .sink {
-                XCTAssertEqual(.init(x: 32 * 5, y: 32 * 4), $0)
+                XCTAssertEqual(32 * 4, $0)
                 expect.fulfill()
             }
             .store(in: &subs)
@@ -90,7 +90,7 @@ final class MapTests: XCTestCase {
         map.characters[.cornelius] = (5, 0)
         
         map
-            .move
+            .moveY
             .sink { _ in
                 expect.fulfill()
             }
@@ -178,9 +178,9 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .move
+            .moveY
             .sink {
-                XCTAssertEqual(.init(x: 32 * 5, y: 32 * 3), $0)
+                XCTAssertEqual(32 * 3, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -206,9 +206,9 @@ final class MapTests: XCTestCase {
         map.characters[.cornelius] = (5, 2)
 
         map
-            .move
+            .moveY
             .sink {
-                XCTAssertEqual(.init(x: 32 * 5, y: 32 * 3), $0)
+                XCTAssertEqual(32 * 3, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -236,7 +236,7 @@ final class MapTests: XCTestCase {
         map.characters[.cornelius] = (5, 98)
         
         map
-            .move
+            .moveY
             .sink { _ in
                 expect.fulfill()
             }
@@ -255,7 +255,7 @@ final class MapTests: XCTestCase {
         map.characters[.cornelius] = (5, 98)
         
         map
-            .move
+            .moveY
             .sink { _ in
                 expect.fulfill()
             }
@@ -315,7 +315,7 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .move
+            .moveX
             .sink { _ in
                 expectMove.fulfill()
             }
@@ -354,7 +354,7 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .move
+            .moveX
             .sink { _ in
                 expectMove.fulfill()
             }
@@ -384,9 +384,9 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .move
+            .moveX
             .sink {
-                XCTAssertEqual(.init(x: 32 * 5, y: 32 * 5), $0)
+                XCTAssertEqual(32 * 5, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -407,7 +407,7 @@ final class MapTests: XCTestCase {
         map.characters[.cornelius] = (1, 5)
         
         map
-            .move
+            .moveX
             .sink { _ in
                 expect.fulfill()
             }
@@ -437,9 +437,9 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .move
+            .moveX
             .sink {
-                XCTAssertEqual(.init(x: 32 * 6, y: 32 * 5), $0)
+                XCTAssertEqual(32 * 6, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -460,7 +460,7 @@ final class MapTests: XCTestCase {
         map.characters[.cornelius] = (198, 5)
         
         map
-            .move
+            .moveX
             .sink { _ in
                 expect.fulfill()
             }

@@ -2,7 +2,8 @@ import SpriteKit
 import Combine
 
 public final class Map {
-    public let move = PassthroughSubject<CGPoint, Never>()
+    public let moveX = PassthroughSubject<CGFloat, Never>()
+    public let moveY = PassthroughSubject<CGFloat, Never>()
     public let face = PassthroughSubject<Face, Never>()
     public let state = PassthroughSubject<State, Never>()
     public let direction = PassthroughSubject<Direction, Never>()
@@ -48,23 +49,23 @@ public final class Map {
                     self.face.send(.none)
                 }
             } else {
-                gravity(position: position)
+                gravity(y: position.y)
             }
             
             self.jumping.send(.start)
         case .start:
             if area[position.x][position.y] {
-                flying(position: position)
+                flying(y: position.y)
                 self.face.send(.jump)
                 self.jumping.send(jumping.next)
             } else {
-                gravity(position: position)
+                gravity(y: position.y)
             }
         default:
             if area[position.x][position.y + 1] {
                 self.jumping.send(.start)
             } else {
-                flying(position: position)
+                flying(y: position.y)
                 self.jumping.send(jumping.next)
             }
         }
@@ -81,7 +82,7 @@ public final class Map {
                     walk(face: face)
                     
                     if position.x > 2 {
-                        move(x: position.x - 1, y: position.y)
+                        move(x: position.x - 1)
                     }
                 }
             } else {
@@ -95,7 +96,7 @@ public final class Map {
                     walk(face: face)
                     
                     if position.x < area.count - 2 {
-                        move(x: position.x + 1, y: position.y)
+                        move(x: position.x + 1)
                     }
                 }
             }
@@ -118,26 +119,31 @@ public final class Map {
         }
     }
     
-    private func flying(position: (x: Int, y: Int)) {
-        let next = position.y + 1
+    private func flying(y: Int) {
+        let next = y + 1
         
         if next < area.first!.count - 1 {
-            move(x: position.x, y: next)
+            move(y: next)
         }
     }
     
-    private func gravity(position: (x: Int, y: Int)) {
-        let next = position.y - 1
+    private func gravity(y: Int) {
+        let next = y - 1
         
         if next < 0 {
             state.send(.fell)
         } else {
-            move(x: position.x, y: next)
+            move(y: next)
         }
     }
     
-    private func move(x: Int, y: Int) {
-        characters[.cornelius] = (x: x, y: y)
-        move.send(self[.cornelius])
+    private func move(x: Int) {
+        characters[.cornelius] = (x: x, y: characters[.cornelius]!.y)
+        moveX.send(self[.cornelius].x)
+    }
+    
+    private func move(y: Int) {
+        characters[.cornelius] = (x: characters[.cornelius]!.x, y: y)
+        moveY.send(self[.cornelius].y)
     }
 }
