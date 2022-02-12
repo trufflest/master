@@ -287,9 +287,86 @@ final class MapTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
     
-    func testWalkingLeft() {
+    func testDirectionLeft() {
         let expectFace = expectation(description: "")
         let expectDirection = expectation(description: "")
+        let expectMove = expectation(description: "")
+        expectMove.isInverted = true
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (6, 5)
+        
+        map
+            .face
+            .sink {
+                XCTAssertEqual(.none, $0)
+                expectFace.fulfill()
+            }
+            .store(in: &subs)
+        
+        map
+            .direction
+            .sink {
+                XCTAssertEqual(.left, $0)
+                expectDirection.fulfill()
+            }
+            .store(in: &subs)
+        
+        map
+            .move
+            .sink { _ in
+                expectMove.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .left, face: .walk1, direction: .right)
+        
+        waitForExpectations(timeout: 0.1)
+    }
+    
+    func testDirectionRight() {
+        let expectFace = expectation(description: "")
+        let expectDirection = expectation(description: "")
+        let expectMove = expectation(description: "")
+        expectMove.isInverted = true
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (6, 5)
+        
+        map
+            .face
+            .sink {
+                XCTAssertEqual(.none, $0)
+                expectFace.fulfill()
+            }
+            .store(in: &subs)
+        
+        map
+            .direction
+            .sink {
+                XCTAssertEqual(.right, $0)
+                expectDirection.fulfill()
+            }
+            .store(in: &subs)
+        
+        map
+            .move
+            .sink { _ in
+                expectMove.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .right, face: .walk1, direction: .left)
+        
+        waitForExpectations(timeout: 0.1)
+    }
+    
+    func testWalkingLeft() {
+        let expectFace = expectation(description: "")
         let expectMove = expectation(description: "")
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
@@ -307,14 +384,6 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .direction
-            .sink {
-                XCTAssertEqual(.left, $0)
-                expectDirection.fulfill()
-            }
-            .store(in: &subs)
-        
-        map
             .move
             .sink {
                 XCTAssertEqual(.init(x: 32 * 5, y: 32 * 5), $0)
@@ -322,7 +391,7 @@ final class MapTests: XCTestCase {
             }
             .store(in: &subs)
         
-        map.update(jumping: .none, walking: .left, face: .walk1, direction: .right)
+        map.update(jumping: .none, walking: .left, face: .walk1, direction: .left)
         
         waitForExpectations(timeout: 0.1)
     }
@@ -351,7 +420,6 @@ final class MapTests: XCTestCase {
     
     func testWalkingRight() {
         let expectFace = expectation(description: "")
-        let expectDirection = expectation(description: "")
         let expectMove = expectation(description: "")
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
@@ -369,14 +437,6 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map
-            .direction
-            .sink {
-                XCTAssertEqual(.right, $0)
-                expectDirection.fulfill()
-            }
-            .store(in: &subs)
-        
-        map
             .move
             .sink {
                 XCTAssertEqual(.init(x: 32 * 6, y: 32 * 5), $0)
@@ -384,7 +444,7 @@ final class MapTests: XCTestCase {
             }
             .store(in: &subs)
         
-        map.update(jumping: .none, walking: .right, face: .walk1, direction: .left)
+        map.update(jumping: .none, walking: .right, face: .walk1, direction: .right)
         
         waitForExpectations(timeout: 0.1)
     }
@@ -430,8 +490,8 @@ final class MapTests: XCTestCase {
             }
             .store(in: &subs)
         
-        map.update(jumping: .none, walking: .left, face: .walk2, direction: .right)
-        map.update(jumping: .none, walking: .left, face: .none, direction: .right)
+        map.update(jumping: .none, walking: .left, face: .walk2, direction: .left)
+        map.update(jumping: .none, walking: .left, face: .none, direction: .left)
         
         waitForExpectations(timeout: 0.1)
     }
@@ -454,7 +514,7 @@ final class MapTests: XCTestCase {
             }
             .store(in: &subs)
         
-        map.update(jumping: .none, walking: .left, face: .jump, direction: .right)
+        map.update(jumping: .none, walking: .left, face: .jump, direction: .left)
         
         waitForExpectations(timeout: 0.1)
     }
@@ -478,8 +538,8 @@ final class MapTests: XCTestCase {
             }
             .store(in: &subs)
         
-        map.update(jumping: .none, walking: .right, face: .walk2, direction: .left)
-        map.update(jumping: .none, walking: .right, face: .none, direction: .left)
+        map.update(jumping: .none, walking: .right, face: .walk2, direction: .right)
+        map.update(jumping: .none, walking: .right, face: .none, direction: .right)
         
         waitForExpectations(timeout: 0.1)
     }

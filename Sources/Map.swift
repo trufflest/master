@@ -70,31 +70,33 @@ public final class Map {
         }
         
         if walking != .none {
-            
-            switch face {
-            case .walk1:
-                self.face.send(.walk2)
-            case .walk2, .none:
-                self.face.send(.walk1)
-            default:
-                break
-            }
-            
             if walking == .left {
                 if direction == .right {
                     self.direction.send(.left)
-                }
-                
-                if position.x > 2 {
-                    move(x: position.x - 1, y: position.y)
+                    
+                    if face != .none {
+                        self.face.send(.none)
+                    }
+                } else {
+                    walk(face: face)
+                    
+                    if position.x > 2 {
+                        move(x: position.x - 1, y: position.y)
+                    }
                 }
             } else {
                 if direction == .left {
                     self.direction.send(.right)
-                }
-                
-                if position.x < area.count - 2 {
-                    move(x: position.x + 1, y: position.y)
+                    
+                    if face != .none {
+                        self.face.send(.none)
+                    }
+                } else {
+                    walk(face: face)
+                    
+                    if position.x < area.count - 2 {
+                        move(x: position.x + 1, y: position.y)
+                    }
                 }
             }
         }
@@ -103,6 +105,17 @@ public final class Map {
     public subscript(_ character: Character) -> CGPoint {
         .init(x: .init(characters[character]!.x) * size,
               y: .init(characters[character]!.y) * size)
+    }
+    
+    private func walk(face: Face) {
+        switch face {
+        case .walk1:
+            self.face.send(.walk2)
+        case .walk2, .none:
+            self.face.send(.walk1)
+        default:
+            break
+        }
     }
     
     private func flying(position: (x: Int, y: Int)) {
