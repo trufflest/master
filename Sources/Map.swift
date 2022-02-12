@@ -5,8 +5,10 @@ public final class Map {
     public let move = PassthroughSubject<CGPoint, Never>()
     public let face = PassthroughSubject<Face, Never>()
     public let over = PassthroughSubject<Over, Never>()
+    public let direction = PassthroughSubject<Direction, Never>()
     public let jumpClear = PassthroughSubject<Void, Never>()
     public let jumpConsume = PassthroughSubject<Void, Never>()
+    
     var characters: [Character : (x: Int, y: Int)]
     let area: [[Bool]]
     private let size: CGFloat
@@ -29,14 +31,18 @@ public final class Map {
         characters = [.cornelius : (x, y)]
     }
     
-    public func update(jumping: Jumping, walking: Walking) {
+    public func update(jumping: Jumping,
+                       walking: Walking,
+                       face: Face,
+                       direction: Direction) {
+        
         let position = characters[.cornelius]!
         
         switch jumping {
         case .none:
             if area[position.x][position.y] {
-                if walking == .none {
-                    face.send(.none)
+                if walking == .none, face != .none {
+                    self.face.send(.none)
                 }
             } else {
                 gravity(position: position)
@@ -45,7 +51,7 @@ public final class Map {
             jumpClear.send()
         case .start:
             if area[position.x][position.y] {
-                face.send(.jump)
+                self.face.send(.jump)
                 move(x: position.x, y: position.y + 1)
                 jumpConsume.send()
             } else {
@@ -58,6 +64,28 @@ public final class Map {
                 move(x: position.x, y: position.y + 1)
                 jumpConsume.send()
             }
+        }
+        
+        switch walking {
+        case .left:
+            
+            switch face {
+            case .walk1:
+                self.face.send(.walk2)
+            case .walk2, .none:
+                self.face.send(.walk1)
+            default:
+                break
+            }
+            
+            if direction == .right {
+                self.direction.send(.left)
+            }
+            
+            move(x: position.x - 1, y: position.y)
+            
+        default:
+            break
         }
     }
     
