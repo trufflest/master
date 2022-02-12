@@ -116,7 +116,7 @@ public final class Map {
     private func gravity(position: (x: Int, y: Int)) {
         let next = position.y - 1
         
-        if next < 1 {
+        if next < 0 {
             state.send(.fell)
         } else {
             move(x: position.x, y: next)

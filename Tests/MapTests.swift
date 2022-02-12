@@ -87,7 +87,7 @@ final class MapTests: XCTestCase {
         expect.isInverted = true
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 1)
+        map.characters[.cornelius] = (5, 0)
         
         map
             .move
@@ -106,7 +106,7 @@ final class MapTests: XCTestCase {
         let expectJumping = expectation(description: "")
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 1)
+        map.characters[.cornelius] = (5, 0)
         
         map
             .state
