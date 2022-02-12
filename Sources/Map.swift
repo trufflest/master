@@ -8,11 +8,15 @@ public final class Map {
     public let direction = PassthroughSubject<Direction, Never>()
     public let jumping = PassthroughSubject<Jumping, Never>()
     
-    var characters: [Character : (x: Int, y: Int)]
-    let area: [[Bool]]
-    private let size: CGFloat
+    var characters = [Character : (x: Int, y: Int)]()
+    private(set) var area = [[Bool]]()
+    private(set) var size = CGFloat()
     
-    init(ground: SKTileMapNode) {
+    public init() {
+        
+    }
+    
+    public func load(ground: SKTileMapNode) {
         size = ground.tileSize.width
         area = (0 ..< ground.numberOfColumns).map { x in
             (0 ..< ground.numberOfRows).map { y in

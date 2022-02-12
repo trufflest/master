@@ -6,6 +6,7 @@ import Combine
 final class MapTests: XCTestCase {
     private var group: SKTileGroup!
     private var ground: SKTileMapNode!
+    private var map: Map!
     private var subs: Set<AnyCancellable>!
     
     override func setUp() {
@@ -14,11 +15,12 @@ final class MapTests: XCTestCase {
                        columns: 200,
                        rows: 100,
                        tileSize: .init(width: 32, height: 32))
+        map = .init()
         subs = .init()
     }
     
     func testSize() {
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         XCTAssertEqual(200, map.area.count)
         
         map
@@ -33,7 +35,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 3)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 3)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         
         for x in 0 ..< map.area.count {
             for y in 0 ..< map.area[x].count {
@@ -63,12 +65,14 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 2, row: 1)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 2, row: 2)
         
-        XCTAssertEqual(.init(x: 64, y: 64), Map(ground: ground)[.cornelius])
+        map.load(ground: ground)
+        XCTAssertEqual(.init(x: 64, y: 64), map[.cornelius])
     }
     
     func testFalling() {
         let expect = expectation(description: "")
-        let map = Map(ground: ground)
+        
+        map.load(ground: ground)
         map.characters[.cornelius] = (5, 5)
         
         map
@@ -88,7 +92,7 @@ final class MapTests: XCTestCase {
         let expectFace = expectation(description: "")
         let expectJumping = expectation(description: "")
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (5, 2)
         
         map
@@ -118,7 +122,7 @@ final class MapTests: XCTestCase {
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 2)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (5, 2)
         
         map
@@ -149,7 +153,7 @@ final class MapTests: XCTestCase {
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 2)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (5, 2)
         
         map
@@ -185,7 +189,7 @@ final class MapTests: XCTestCase {
         let expectMove = expectation(description: "")
         let expectJumping = expectation(description: "")
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (5, 2)
 
         map
@@ -214,7 +218,7 @@ final class MapTests: XCTestCase {
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 3)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (5, 2)
         
         map
@@ -238,7 +242,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (6, 5)
         
         map
@@ -277,7 +281,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 0, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 1, row: 5)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (1, 5)
         
         map
@@ -300,7 +304,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (5, 5)
         
         map
@@ -339,7 +343,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 198, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 199, row: 5)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (198, 5)
         
         map
@@ -362,7 +366,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (6, 5)
         
         map
@@ -387,7 +391,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (6, 5)
         
         map
@@ -410,7 +414,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (4, 5)
         
         map
@@ -434,7 +438,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         
-        let map = Map(ground: ground)
+        map.load(ground: ground)
         map.characters[.cornelius] = (5, 5)
         
         map
