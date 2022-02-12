@@ -44,7 +44,10 @@ public final class Map {
         
         switch jumping {
         case .none:
-            if area[position.x][position.y] {
+            if area[position.x][position.y],
+               area[position.x - 1][position.y],
+               area[position.x + 1][position.y] {
+                
                 if walking == .none, face != .none {
                     self.face.send(.none)
                 }
@@ -54,7 +57,10 @@ public final class Map {
             
             self.jumping.send(.start)
         case .start:
-            if area[position.x][position.y] {
+            if area[position.x][position.y],
+               area[position.x - 1][position.y],
+               area[position.x + 1][position.y] {
+                
                 flying(y: position.y)
                 self.face.send(.jump)
                 self.jumping.send(jumping.next)
