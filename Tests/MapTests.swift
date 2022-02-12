@@ -60,7 +60,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 2)
         
         map.load(ground: ground)
-        XCTAssertEqual(.init(x: 96, y: 96), map[.cornelius])
+        XCTAssertEqual(.init(x: 96, y: 64), map[.cornelius])
     }
     
     func testFalling() {
@@ -87,7 +87,7 @@ final class MapTests: XCTestCase {
         expect.isInverted = true
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 2)
+        map.characters[.cornelius] = (5, 1)
         
         map
             .move
@@ -102,11 +102,11 @@ final class MapTests: XCTestCase {
     }
     
     func testOverFell() {
-        let expectOver = expectation(description: "a")
-        let expectJumping = expectation(description: "b")
+        let expectOver = expectation(description: "")
+        let expectJumping = expectation(description: "")
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 2)
+        map.characters[.cornelius] = (5, 1)
         
         map
             .state
@@ -230,10 +230,10 @@ final class MapTests: XCTestCase {
         let expect = expectation(description: "")
         expect.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 97)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 98)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 97)
+        map.characters[.cornelius] = (5, 98)
         
         map
             .move
@@ -252,7 +252,7 @@ final class MapTests: XCTestCase {
         expect.isInverted = true
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 97)
+        map.characters[.cornelius] = (5, 98)
         
         map
             .move

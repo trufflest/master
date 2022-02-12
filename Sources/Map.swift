@@ -27,7 +27,7 @@ public final class Map {
         var y = 0
         let x = 3
         
-        while area[x].count > y + 1, area[x][y] {
+        while area[x].count > y + 1, area[x][y + 1] {
             y += 1
         }
         
@@ -85,7 +85,7 @@ public final class Map {
                     self.direction.send(.left)
                 }
                 
-                if position.x > 1 {
+                if position.x > 2 {
                     move(x: position.x - 1, y: position.y)
                 }
             } else {
@@ -108,7 +108,7 @@ public final class Map {
     private func flying(position: (x: Int, y: Int)) {
         let next = position.y + 1
         
-        if next < area.first!.count - 2 {
+        if next < area.first!.count - 1 {
             move(x: position.x, y: next)
         }
     }
@@ -116,7 +116,7 @@ public final class Map {
     private func gravity(position: (x: Int, y: Int)) {
         let next = position.y - 1
         
-        if next < 2 {
+        if next < 1 {
             state.send(.fell)
         } else {
             move(x: position.x, y: next)
