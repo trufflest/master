@@ -81,8 +81,11 @@ public final class Map {
                 if direction == .right {
                     self.direction.send(.left)
                     
-                    if face != .none {
+                    switch face {
+                    case .walk1, .walk2:
                         self.face.send(.none)
+                    default:
+                        break
                     }
                 } else {
                     if area[position.x][position.y] {
@@ -98,8 +101,11 @@ public final class Map {
                 if direction == .left {
                     self.direction.send(.right)
                     
-                    if face != .none {
+                    switch face {
+                    case .walk1, .walk2:
                         self.face.send(.none)
+                    default:
+                        break
                     }
                 } else {
                     if area[position.x][position.y] {
