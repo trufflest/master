@@ -149,7 +149,7 @@ public final class Map {
         let next = y - 1
         
         if next < 1 {
-            state.send(.fell)
+            state.send(.dead)
         }
         
         if next >= 0 {

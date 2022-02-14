@@ -203,7 +203,7 @@ final class MapTests: XCTestCase {
         map
             .state
             .sink {
-                XCTAssertEqual(.fell, $0)
+                XCTAssertEqual(.dead, $0)
                 expectOver.fulfill()
             }
             .store(in: &subs)
