@@ -55,12 +55,12 @@ final class MapTests: XCTestCase {
     }
     
     func testOrigin() {
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 0)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 1)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 2)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 0)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 1)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 2)
         
         map.load(ground: ground)
-        XCTAssertEqual(.init(x: 96, y: 64), map[.cornelius])
+        XCTAssertEqual(.init(x: 4 * 32, y: 3 * 32), map[.cornelius])
     }
     
     func testFalling() {
@@ -82,94 +82,23 @@ final class MapTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
     
-    func testFallingCornerLeft() {
+    func testCornerNotFalling() {
         let expect = expectation(description: "")
+        expect.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 5)
         
         map
             .moveY
-            .sink {
-                XCTAssertEqual(32 * 4, $0)
+            .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
         map.update(jumping: .none, walking: .none, face: .none, direction: .right)
-        
-        waitForExpectations(timeout: 0.1)
-    }
-    
-    func testFallingCornerRight() {
-        let expect = expectation(description: "")
-        
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        
-        map.load(ground: ground)
-        map.characters[.cornelius] = (3, 5)
-        
-        map
-            .moveY
-            .sink {
-                XCTAssertEqual(32 * 4, $0)
-                expect.fulfill()
-            }
-            .store(in: &subs)
-        
-        map.update(jumping: .none, walking: .none, face: .none, direction: .right)
-        
-        waitForExpectations(timeout: 0.1)
-    }
-    
-    func testFallingCornerLeftStart() {
-        let expect = expectation(description: "")
-        
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        
-        map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
-        
-        map
-            .moveY
-            .sink {
-                XCTAssertEqual(32 * 4, $0)
-                expect.fulfill()
-            }
-            .store(in: &subs)
-        
-        map.update(jumping: .start, walking: .none, face: .none, direction: .right)
-        
-        waitForExpectations(timeout: 0.1)
-    }
-    
-    func testFallingCornerRightStart() {
-        let expect = expectation(description: "")
-        
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        
-        map.load(ground: ground)
-        map.characters[.cornelius] = (3, 5)
-        
-        map
-            .moveY
-            .sink {
-                XCTAssertEqual(32 * 4, $0)
-                expect.fulfill()
-            }
-            .store(in: &subs)
-        
-        map.update(jumping: .start, walking: .none, face: .none, direction: .right)
         
         waitForExpectations(timeout: 0.1)
     }
@@ -224,10 +153,10 @@ final class MapTests: XCTestCase {
     func testGrounding() {
         let expectFace = expectation(description: "")
         let expectJumping = expectation(description: "")
+        let expectMoveY = expectation(description: "")
+        expectMoveY.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 2)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 2)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 2)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 1)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 2)
@@ -248,6 +177,13 @@ final class MapTests: XCTestCase {
             }
             .store(in: &subs)
         
+        map
+            .moveY
+            .sink { _ in
+                expectMoveY.fulfill()
+            }
+            .store(in: &subs)
+        
         map.update(jumping: .none, walking: .none, face: .walk1, direction: .right)
         
         waitForExpectations(timeout: 0.1)
@@ -258,9 +194,7 @@ final class MapTests: XCTestCase {
         let expectMove = expectation(description: "")
         let expectJumping = expectation(description: "")
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 2)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 2)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 2)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 1)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 2)
@@ -326,9 +260,7 @@ final class MapTests: XCTestCase {
         let expect = expectation(description: "")
         expect.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 98)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 98)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 98)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 97)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 98)
@@ -391,7 +323,7 @@ final class MapTests: XCTestCase {
         let expectMove = expectation(description: "")
         expectMove.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (6, 5)
@@ -430,7 +362,7 @@ final class MapTests: XCTestCase {
         let expectMove = expectation(description: "")
         expectMove.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (6, 5)
@@ -467,9 +399,7 @@ final class MapTests: XCTestCase {
         let expectFace = expectation(description: "")
         let expectMove = expectation(description: "")
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 7, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (6, 5)
@@ -499,9 +429,7 @@ final class MapTests: XCTestCase {
         let expect = expectation(description: "")
         expect.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 0, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 1, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 2, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 1, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (1, 5)
@@ -522,9 +450,7 @@ final class MapTests: XCTestCase {
         let expectFace = expectation(description: "")
         let expectMove = expectation(description: "")
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 5)
@@ -592,8 +518,7 @@ final class MapTests: XCTestCase {
         let expect = expectation(description: "")
         expect.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 198, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 199, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 198, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (198, 5)
@@ -614,10 +539,7 @@ final class MapTests: XCTestCase {
         let expect = expectation(description: "")
         expect.expectedFulfillmentCount = 2
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 7, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (6, 5)
@@ -636,37 +558,12 @@ final class MapTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
     
-    func testWalkingLeftJumping() {
-        let expect = expectation(description: "")
-        expect.isInverted = true
-        
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
-        
-        map.load(ground: ground)
-        map.characters[.cornelius] = (6, 5)
-        
-        map
-            .face
-            .sink { _ in
-                expect.fulfill()
-            }
-            .store(in: &subs)
-        
-        map.update(jumping: .none, walking: .left, face: .jump, direction: .left)
-        
-        waitForExpectations(timeout: 0.1)
-    }
-    
     func testWalkingRight2() {
         let expect = expectation(description: "")
         expect.expectedFulfillmentCount = 2
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 3, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 4)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (4, 5)
@@ -685,35 +582,13 @@ final class MapTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
     
-    func testWalkingRightJumping() {
-        let expect = expectation(description: "")
-        expect.isInverted = true
-        
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
-        
-        map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
-        
-        map
-            .face
-            .sink { _ in
-                expect.fulfill()
-            }
-            .store(in: &subs)
-        
-        map.update(jumping: .none, walking: .right, face: .jump, direction: .right)
-        
-        waitForExpectations(timeout: 0.1)
-    }
-    
     func testWalkingLeftCollision() {
         let expect = expectation(description: "")
         expect.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 6)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (6, 5)
@@ -734,9 +609,9 @@ final class MapTests: XCTestCase {
         let expect = expectation(description: "")
         expect.isInverted = true
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 6)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 5)
@@ -796,9 +671,7 @@ final class MapTests: XCTestCase {
         expectMoveX.isInverted = true
         let expectMoveY = expectation(description: "")
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 3)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 5)
@@ -826,9 +699,7 @@ final class MapTests: XCTestCase {
     func testLandingAndWalking() {
         let expect = expectation(description: "")
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 5)
