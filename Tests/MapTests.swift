@@ -822,4 +822,27 @@ final class MapTests: XCTestCase {
         
         waitForExpectations(timeout: 0.1)
     }
+    
+    func testLandingAndWalking() {
+        let expect = expectation(description: "")
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 5)
+        
+        map
+            .face
+            .sink {
+                XCTAssertEqual(.walk1, $0)
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .none, walking: .left, face: .jump, direction: .left)
+        
+        waitForExpectations(timeout: 0.1)
+    }
 }

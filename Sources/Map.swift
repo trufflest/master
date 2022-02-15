@@ -76,48 +76,49 @@ public final class Map {
             }
         }
         
-        if walking != .none {
-            if walking == .left {
-                if direction == .right {
-                    self.direction.send(.left)
-                    
-                    switch face {
-                    case .walk1, .walk2:
-                        self.face.send(.none)
-                    default:
-                        break
-                    }
-                } else {
-                    if area[position.x][position.y] {
-                        walk(face: face)
-                    }
-                    
-                    if position.x > 1,
-                       !area[position.x - 1][position.y + 1] {
-                        move(x: position.x - 1)
-                    }
+        switch walking {
+        case .left:
+            if direction == .right {
+                self.direction.send(.left)
+                
+                switch face {
+                case .walk1, .walk2:
+                    self.face.send(.none)
+                default:
+                    break
                 }
             } else {
-                if direction == .left {
-                    self.direction.send(.right)
-                    
-                    switch face {
-                    case .walk1, .walk2:
-                        self.face.send(.none)
-                    default:
-                        break
-                    }
-                } else {
-                    if area[position.x][position.y] {
-                        walk(face: face)
-                    }
-                    
-                    if position.x < area.count - 2,
-                       !area[position.x + 1][position.y + 1] {
-                        move(x: position.x + 1)
-                    }
+                if area[position.x][position.y] {
+                    walk(face: face)
+                }
+                
+                if position.x > 1,
+                   !area[position.x - 1][position.y + 1] {
+                    move(x: position.x - 1)
                 }
             }
+        case .right:
+            if direction == .left {
+                self.direction.send(.right)
+                
+                switch face {
+                case .walk1, .walk2:
+                    self.face.send(.none)
+                default:
+                    break
+                }
+            } else {
+                if area[position.x][position.y] {
+                    walk(face: face)
+                }
+                
+                if position.x < area.count - 2,
+                   !area[position.x + 1][position.y + 1] {
+                    move(x: position.x + 1)
+                }
+            }
+        default:
+            break
         }
     }
     
@@ -130,10 +131,8 @@ public final class Map {
         switch face {
         case .walk1:
             self.face.send(.walk2)
-        case .walk2, .none:
-            self.face.send(.walk1)
         default:
-            break
+            self.face.send(.walk1)
         }
     }
     
