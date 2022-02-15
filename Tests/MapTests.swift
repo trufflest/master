@@ -539,6 +539,7 @@ final class MapTests: XCTestCase {
         let expect = expectation(description: "")
         expect.expectedFulfillmentCount = 2
         
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
@@ -699,7 +700,7 @@ final class MapTests: XCTestCase {
     func testLandingAndWalking() {
         let expect = expectation(description: "")
         
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 4)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (5, 5)
