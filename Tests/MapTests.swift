@@ -469,6 +469,7 @@ final class MapTests: XCTestCase {
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 7, row: 5)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (6, 5)
@@ -520,6 +521,7 @@ final class MapTests: XCTestCase {
         let expectFace = expectation(description: "")
         let expectMove = expectation(description: "")
         
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         
@@ -784,6 +786,38 @@ final class MapTests: XCTestCase {
             .store(in: &subs)
         
         map.update(jumping: .first, walking: .right, face: .jump, direction: .left)
+        
+        waitForExpectations(timeout: 0.1)
+    }
+    
+    func testJumpWalkCorner() {
+        let expectMoveX = expectation(description: "")
+        expectMoveX.isInverted = true
+        let expectMoveY = expectation(description: "")
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 3)
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 5)
+        
+        map
+            .moveX
+            .sink { _ in
+                expectMoveX.fulfill()
+            }
+            .store(in: &subs)
+        
+        map
+            .moveY
+            .sink {
+                XCTAssertEqual(4 * 32, $0)
+                expectMoveY.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .start, walking: .right, face: .jump, direction: .right)
         
         waitForExpectations(timeout: 0.1)
     }

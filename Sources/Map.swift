@@ -40,7 +40,7 @@ public final class Map {
                        face: Face,
                        direction: Direction) {
         
-        let position = characters[.cornelius]!
+        var position = characters[.cornelius]!
         
         switch jumping {
         case .none:
@@ -52,7 +52,7 @@ public final class Map {
                     self.face.send(.none)
                 }
             } else {
-                gravity(y: position.y)
+                position = gravity(y: position.y)
             }
             
             self.jumping.send(.start)
@@ -61,17 +61,17 @@ public final class Map {
                area[position.x - 1][position.y],
                area[position.x + 1][position.y] {
                 
-                flying(y: position.y)
+                position = flying(y: position.y)
                 self.face.send(.jump)
                 self.jumping.send(jumping.next)
             } else {
-                gravity(y: position.y)
+                position = gravity(y: position.y)
             }
         default:
             if area[position.x][position.y + 1] {
                 self.jumping.send(.start)
             } else {
-                flying(y: position.y)
+                position = flying(y: position.y)
                 self.jumping.send(jumping.next)
             }
         }
@@ -137,15 +137,17 @@ public final class Map {
         }
     }
     
-    private func flying(y: Int) {
+    private func flying(y: Int) -> (x: Int, y: Int) {
         let next = y + 1
         
         if next < area.first!.count - 1 {
             move(y: next)
         }
+        
+        return characters[.cornelius]!
     }
     
-    private func gravity(y: Int) {
+    private func gravity(y: Int) -> (x: Int, y: Int) {
         let next = y - 1
         
         if next < 1 {
@@ -155,6 +157,8 @@ public final class Map {
         if next >= 0 {
             move(y: next)
         }
+        
+        return characters[.cornelius]!
     }
     
     private func move(x: Int) {
