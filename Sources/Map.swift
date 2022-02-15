@@ -68,6 +68,10 @@ public final class Map {
                 position = gravity(y: position.y)
             }
         default:
+            if face != .jump {
+                self.face.send(.jump)
+            }
+            
             if area[position.x][position.y + 1] {
                 self.jumping.send(.start)
             } else {

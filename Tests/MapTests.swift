@@ -845,4 +845,23 @@ final class MapTests: XCTestCase {
         
         waitForExpectations(timeout: 0.1)
     }
+    
+    func testFlyingAndWalking() {
+        let expect = expectation(description: "")
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 5)
+        
+        map
+            .face
+            .sink {
+                XCTAssertEqual(.jump, $0)
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .first, walking: .left, face: .walk1, direction: .left)
+        
+        waitForExpectations(timeout: 0.1)
+    }
 }
