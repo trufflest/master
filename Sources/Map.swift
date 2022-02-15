@@ -43,29 +43,27 @@ public final class Map {
         var position = characters[.cornelius]!
         
         switch jumping {
-        case .none:
+        case .none, .start:
             if area[position.x][position.y],
                area[position.x - 1][position.y],
                area[position.x + 1][position.y] {
                 
-                if walking == .none, face != .none {
-                    self.face.send(.none)
+                if jumping == .none {
+                    if walking == .none, face != .none {
+                        self.face.send(.none)
+                    }
+                    self.jumping.send(.start)
+                } else {
+                    position = flying(y: position.y)
+                    self.face.send(.jump)
+                    self.jumping.send(jumping.next)
                 }
             } else {
                 position = gravity(y: position.y)
-            }
-            
-            self.jumping.send(.start)
-        case .start:
-            if area[position.x][position.y],
-               area[position.x - 1][position.y],
-               area[position.x + 1][position.y] {
                 
-                position = flying(y: position.y)
-                self.face.send(.jump)
-                self.jumping.send(jumping.next)
-            } else {
-                position = gravity(y: position.y)
+                if jumping == .none {
+                    self.jumping.send(.start)
+                }
             }
         default:
             if face != .jump {
