@@ -501,6 +501,7 @@ final class MapTests: XCTestCase {
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 0, row: 5)
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 1, row: 5)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 2, row: 5)
         
         map.load(ground: ground)
         map.characters[.cornelius] = (1, 5)
@@ -512,7 +513,7 @@ final class MapTests: XCTestCase {
             }
             .store(in: &subs)
         
-        map.update(jumping: .none, walking: .left, face: .walk1, direction: .right)
+        map.update(jumping: .none, walking: .left, face: .walk1, direction: .left)
         
         waitForExpectations(timeout: 0.1)
     }
@@ -604,7 +605,7 @@ final class MapTests: XCTestCase {
             }
             .store(in: &subs)
         
-        map.update(jumping: .none, walking: .right, face: .walk1, direction: .left)
+        map.update(jumping: .none, walking: .right, face: .walk1, direction: .right)
         
         waitForExpectations(timeout: 0.1)
     }
