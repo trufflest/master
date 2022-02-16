@@ -40,7 +40,8 @@ public final class Map {
                        face: Face,
                        direction: Walking) {
         
-        var position = characters[.cornelius]!
+        let position = characters[.cornelius]!
+        var updated = position
         
         switch jumping {
         case .none, .start:
@@ -51,12 +52,12 @@ public final class Map {
                     }
                     self.jumping.send(.start)
                 } else {
-                    position = flying(y: position.y)
+                    updated = flying(y: position.y)
                     self.face.send(.jump)
                     self.jumping.send(jumping.next)
                 }
             } else {
-                position = gravity(y: position.y)
+                updated = gravity(y: position.y)
                 
                 if jumping == .none {
                     self.jumping.send(.start)
@@ -70,27 +71,29 @@ public final class Map {
             if area[position.x][position.y + 1] {
                 self.jumping.send(.start)
             } else {
-                position = flying(y: position.y)
+                updated = flying(y: position.y)
                 self.jumping.send(jumping.next)
             }
         }
         
         if walking != .none {
             if walking == direction {
-                if position.y > 0 && area[position.x][position.y - 1] {
+                if updated.y > 0 && area[updated.x][updated.y - 1] {
                     walk(face: face)
                 }
                 
                 switch walking {
                 case .left:
-                    if position.x > 1,
-                       !area[position.x - 1][position.y] {
-                        move(x: position.x - 1)
+                    if updated.x > 1,
+                       !area[updated.x - 1][updated.y],
+                       !area[updated.x - 1][position.y] {
+                        move(x: updated.x - 1)
                     }
                 case .right:
-                    if position.x < area.count - 2,
-                       !area[position.x + 1][position.y] {
-                        move(x: position.x + 1)
+                    if updated.x < area.count - 2,
+                       !area[updated.x + 1][updated.y],
+                       !area[updated.x + 1][position.y] {
+                        move(x: updated.x + 1)
                     }
                 default:
                     break

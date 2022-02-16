@@ -736,4 +736,25 @@ final class MapTests: XCTestCase {
         
         waitForExpectations(timeout: 0.1)
     }
+    
+    func testJumpAndWalkCorner() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
+        
+        map.load(ground: ground)
+        map.characters[.cornelius] = (5, 5)
+        
+        map
+            .moveX
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        map.update(jumping: .first, walking: .right, face: .jump, direction: .right)
+        
+        waitForExpectations(timeout: 0.1)
+    }
 }
