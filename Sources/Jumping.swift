@@ -3,8 +3,7 @@ public enum Jumping {
     none,
     start,
     first,
-    second,
-    third
+    second
     
     var next: Self {
         switch self {
@@ -15,8 +14,6 @@ public enum Jumping {
         case .first:
             return .second
         case .second:
-            return .third
-        case .third:
             return .start
         }
     }

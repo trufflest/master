@@ -246,12 +246,12 @@ final class MapTests: XCTestCase {
         map
             .jumping
             .sink {
-                XCTAssertEqual(.third, $0)
+                XCTAssertEqual(.second, $0)
                 expectJumping.fulfill()
             }
             .store(in: &subs)
         
-        map.update(jumping: .second, walking: .none, face: .none, direction: .right)
+        map.update(jumping: .first, walking: .none, face: .none, direction: .right)
         
         waitForExpectations(timeout: 0.1)
     }
