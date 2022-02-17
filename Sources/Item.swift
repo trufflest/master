@@ -1,4 +1,4 @@
-public enum Character: Hashable {
+public enum Item: Hashable {
     case
     cornelius,
     foe(Int)

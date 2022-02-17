@@ -67,7 +67,7 @@ final class MapTests: XCTestCase {
         let expect = expectation(description: "")
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .moveY
@@ -89,7 +89,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .moveY
@@ -108,7 +108,7 @@ final class MapTests: XCTestCase {
         expect.isInverted = true
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 0)
+        map.items[.cornelius] = (5, 0)
         
         map
             .moveY
@@ -127,7 +127,7 @@ final class MapTests: XCTestCase {
         let expectJumping = expectation(description: "")
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 0)
+        map.items[.cornelius] = (5, 0)
         
         map
             .state
@@ -159,7 +159,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 1)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 2)
+        map.items[.cornelius] = (5, 2)
         
         map
             .face
@@ -197,7 +197,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 1)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 2)
+        map.items[.cornelius] = (5, 2)
         
         map
             .face
@@ -233,7 +233,7 @@ final class MapTests: XCTestCase {
         let expectJumping = expectation(description: "")
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 2)
+        map.items[.cornelius] = (5, 2)
 
         map
             .moveY
@@ -263,7 +263,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 97)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 98)
+        map.items[.cornelius] = (5, 98)
         
         map
             .moveY
@@ -282,7 +282,7 @@ final class MapTests: XCTestCase {
         expect.isInverted = true
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 98)
+        map.items[.cornelius] = (5, 98)
         
         map
             .moveY
@@ -302,7 +302,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 3)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 2)
+        map.items[.cornelius] = (5, 2)
         
         map
             .jumping
@@ -326,7 +326,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (6, 5)
+        map.items[.cornelius] = (6, 5)
         
         map
             .face
@@ -365,7 +365,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (6, 5)
+        map.items[.cornelius] = (6, 5)
         
         map
             .face
@@ -402,7 +402,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (6, 5)
+        map.items[.cornelius] = (6, 5)
         
         map
             .face
@@ -432,7 +432,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 1, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (1, 5)
+        map.items[.cornelius] = (1, 5)
         
         map
             .moveX
@@ -453,7 +453,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .face
@@ -481,7 +481,7 @@ final class MapTests: XCTestCase {
         expect.isInverted = true
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .face
@@ -500,7 +500,7 @@ final class MapTests: XCTestCase {
         expect.isInverted = true
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .face
@@ -521,7 +521,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 198, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (198, 5)
+        map.items[.cornelius] = (198, 5)
         
         map
             .moveX
@@ -543,7 +543,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (6, 5)
+        map.items[.cornelius] = (6, 5)
         
         map
             .face
@@ -567,7 +567,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (4, 5)
+        map.items[.cornelius] = (4, 5)
         
         map
             .face
@@ -592,7 +592,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (6, 5)
+        map.items[.cornelius] = (6, 5)
         
         map
             .moveX
@@ -615,7 +615,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .moveX
@@ -634,7 +634,7 @@ final class MapTests: XCTestCase {
         expect.isInverted = true
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (6, 5)
+        map.items[.cornelius] = (6, 5)
         
         map
             .face
@@ -653,7 +653,7 @@ final class MapTests: XCTestCase {
         expect.isInverted = true
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (6, 5)
+        map.items[.cornelius] = (6, 5)
         
         map
             .face
@@ -675,7 +675,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .moveX
@@ -703,7 +703,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .face
@@ -722,7 +722,7 @@ final class MapTests: XCTestCase {
         let expect = expectation(description: "")
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .face
@@ -744,7 +744,7 @@ final class MapTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 5)
         
         map.load(ground: ground)
-        map.characters[.cornelius] = (5, 5)
+        map.items[.cornelius] = (5, 5)
         
         map
             .moveX

@@ -9,7 +9,7 @@ public final class Map {
     public let direction = PassthroughSubject<Walking, Never>()
     public let jumping = PassthroughSubject<Jumping, Never>()
     
-    var characters = [Character : (x: Int, y: Int)]()
+    var items = [Item : (x: Int, y: Int)]()
     private(set) var area = [[Bool]]()
     private(set) var size = CGFloat()
     
@@ -32,7 +32,7 @@ public final class Map {
             y += 1
         }
         
-        characters = [.cornelius : (x, y)]
+        items = [.cornelius : (x, y)]
     }
     
     public func update(jumping: Jumping,
@@ -40,7 +40,7 @@ public final class Map {
                        face: Face,
                        direction: Walking) {
         
-        let position = characters[.cornelius]!
+        let position = items[.cornelius]!
         var updated = position
         
         switch jumping {
@@ -111,9 +111,9 @@ public final class Map {
         }
     }
     
-    public subscript(_ character: Character) -> CGPoint {
-        .init(x: .init(characters[character]!.x) * size,
-              y: .init(characters[character]!.y) * size)
+    public subscript(_ character: Item) -> CGPoint {
+        .init(x: .init(items[character]!.x) * size,
+              y: .init(items[character]!.y) * size)
     }
     
     private func walk(face: Face) {
@@ -132,7 +132,7 @@ public final class Map {
             move(y: next)
         }
         
-        return characters[.cornelius]!
+        return items[.cornelius]!
     }
     
     private func gravity(y: Int) -> (x: Int, y: Int) {
@@ -146,16 +146,16 @@ public final class Map {
             move(y: next)
         }
         
-        return characters[.cornelius]!
+        return items[.cornelius]!
     }
     
     private func move(x: Int) {
-        characters[.cornelius] = (x: x, y: characters[.cornelius]!.y)
+        items[.cornelius] = (x: x, y: items[.cornelius]!.y)
         moveX.send(self[.cornelius].x)
     }
     
     private func move(y: Int) {
-        characters[.cornelius] = (x: characters[.cornelius]!.x, y: y)
+        items[.cornelius] = (x: items[.cornelius]!.x, y: y)
         moveY.send(self[.cornelius].y)
     }
 }
