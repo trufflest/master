@@ -41,14 +41,14 @@ public final class Map {
         items = [.cornelius : .init(x: (.init(x) * tile) + mid, y: .init(y) * tile)]
     }
     
-    public func gravity(jumping: Int, face: Face) {
+    public func gravity(jumping: Int, walking: Walking, face: Face) {
         if jumping == 0 {
             let point = items[.cornelius]!
             let position = position(for: point)
             let below = (x: position.x, y: position.y - 1)
             
             if ground(on: below) && point.y.truncatingRemainder(dividingBy: tile) == 0 {
-                if face != .none {
+                if walking == .none, face != .none {
                     self.face.send(.none)
                 }
             } else {
