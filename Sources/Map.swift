@@ -42,18 +42,26 @@ public final class Map {
     }
     
     public func gravity(jumping: Int, walking: Walking, face: Face) {
-        if jumping == 0 {
+        if jumping < 1 {
             let point = items[.cornelius]!
             
             if ground(on: point) {
                 if walking == .none, face != .none {
                     self.face.send(.none)
                 }
+                
+                if jumping < 0 {
+                    self.jumping.send(0)
+                }
             } else {
                 if point.y <= moving {
                     state.send(.dead)
                 } else {
                     move(y: point.y - moving)
+                    
+                    if jumping == 0 {
+                        self.jumping.send(1)
+                    }
                 }
             }
         }
