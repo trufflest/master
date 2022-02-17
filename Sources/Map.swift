@@ -60,7 +60,7 @@ public final class Map {
                     move(y: point.y - moving)
                     
                     if jumping == 0 {
-                        self.jumping.send(1)
+                        self.jumping.send(-1)
                     }
                 }
             }
