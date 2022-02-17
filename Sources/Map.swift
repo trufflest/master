@@ -35,29 +35,24 @@ public final class Map {
         items = [.cornelius : (x, y)]
     }
     
-    public func update(jumping: Jumping,
-                       walking: Walking,
-                       face: Face,
-                       direction: Walking) {
-        
+    public func jump(jumping: Jumping, face: Face) {
         let position = items[.cornelius]!
-        var updated = position
         
         switch jumping {
         case .none, .start:
             if position.y > 0 && area[position.x][position.y - 1] {
                 if jumping == .none {
-                    if walking == .none, face != .none {
+                    if face != .none {
                         self.face.send(.none)
                     }
                     self.jumping.send(.start)
                 } else {
-                    updated = flying(y: position.y)
+                    flying(y: position.y)
                     self.face.send(.jump)
                     self.jumping.send(jumping.next)
                 }
             } else {
-                updated = gravity(y: position.y)
+                gravity(y: position.y)
                 
                 if jumping == .none {
                     self.jumping.send(.start)
@@ -71,36 +66,40 @@ public final class Map {
             if area[position.x][position.y + 1] {
                 self.jumping.send(.start)
             } else {
-                updated = flying(y: position.y)
+                flying(y: position.y)
                 self.jumping.send(jumping.next)
             }
         }
+    }
+    
+    public func walk(walking: Walking, face: Face, direction: Walking) {
+        let position = items[.cornelius]!
         
         if walking != .none {
             if walking == direction {
-                if updated.y > 0 && area[updated.x][updated.y - 1] {
+                if position.y > 0 && area[position.x][position.y - 1] {
                     walk(face: face)
                 }
-                
+
                 switch walking {
                 case .left:
-                    if updated.x > 1,
-                       !area[updated.x - 1][updated.y],
-                       !area[updated.x - 1][position.y] {
-                        move(x: updated.x - 1)
+                    if position.x > 1,
+                       !area[position.x - 1][position.y],
+                       !area[position.x - 1][position.y] {
+                        move(x: position.x - 1)
                     }
                 case .right:
-                    if updated.x < area.count - 2,
-                       !area[updated.x + 1][updated.y],
-                       !area[updated.x + 1][position.y] {
-                        move(x: updated.x + 1)
+                    if position.x < area.count - 2,
+                       !area[position.x + 1][position.y],
+                       !area[position.x + 1][position.y] {
+                        move(x: position.x + 1)
                     }
                 default:
                     break
                 }
             } else {
                 self.direction.send(walking)
-                
+
                 switch face {
                 case .walk1, .walk2:
                     self.face.send(.none)
