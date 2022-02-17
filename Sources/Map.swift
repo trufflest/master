@@ -2,7 +2,7 @@ import SpriteKit
 import Combine
 
 private let movingHorizontal = 8.0
-private let movingVertical = 16.0
+private let movingVertical = 4.0
 
 public final class Map {
     public let moveX = PassthroughSubject<CGFloat, Never>()
