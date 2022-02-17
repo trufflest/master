@@ -42,11 +42,12 @@ public final class Map {
     }
     
     public func gravity(jumping: Int, face: Face) {
-        let point = items[.cornelius]!
-        let position = position(for: point)
-        
         if jumping == 0 {
-            if position.y > 0 && area[position.x][position.y - 1] {
+            let point = items[.cornelius]!
+            let position = position(for: point)
+            let below = (x: position.x, y: position.y - 1)
+            
+            if ground(on: below) && point.y.truncatingRemainder(dividingBy: tile) == 0 {
                 if face != .none {
                     self.face.send(.none)
                 }
@@ -67,16 +68,18 @@ public final class Map {
     public func jump(jumping: Int, face: Face) {
         let point = items[.cornelius]!
         let position = position(for: point)
+        let below = (x: position.x, y: position.y - 1)
+        let above = (x: position.x, y: position.y + 1)
         
         if face != .jump {
             self.face.send(.jump)
         }
         
         if jumping == 0
-            && position.y > 0 && area[position.x][position.y - 1]
+            && position.y > 0 && ground(on: below)
             || jumping > 0 {
             
-            if area[position.x][position.y + 1] {
+            if ground(on: above) {
                 self.jumping.send(0)
             } else {
                 let next = point.y + moving
@@ -85,7 +88,7 @@ public final class Map {
                     move(y: next)
                 }
                 
-                self.jumping.send(jumping < 20
+                self.jumping.send(jumping < 12
                                   ? jumping + 1
                                   : 0)
             }
@@ -95,25 +98,31 @@ public final class Map {
     public func walk(walking: Walking, face: Face, direction: Walking) {
         let point = items[.cornelius]!
         let position = position(for: point)
+        let below = (x: position.x, y: position.y - 1)
         
         if walking == direction {
-            if position.y > 0 && area[position.x][position.y - 1] {
-                walk(face: face)
+            if position.y > 0 && ground(on: below) {
+                switch face {
+                case .walk1:
+                    self.face.send(.walk2)
+                default:
+                    self.face.send(.walk1)
+                }
             }
 
-            switch walking {
-            case .left:
-                if point.x > moving,
-                   !area[position.x - 1][position.y] {
-                    move(x: point.x - moving)
-                }
-            case .right:
-                if point.x < size.width - moving,
-                   !area[position.x + 1][position.y] {
-                    move(x: point.x + moving)
-                }
-            default:
-                break
+            var delta = point.x + moving
+            
+            if walking == .left {
+                delta = point.x - moving
+            }
+            
+            let nextPoint = CGPoint(x: delta, y: point.y)
+            let nextPosition = self.position(for: nextPoint)
+            
+            if nextPoint.x > moving,
+               nextPoint.x < size.width - moving,
+               !ground(on: nextPosition) {
+                move(x: delta)
             }
         } else {
             self.direction.send(walking)
@@ -144,6 +153,10 @@ public final class Map {
     private func move(y: CGFloat) {
         items[.cornelius]!.y = y
         moveY.send(items[.cornelius]!.y)
+    }
+    
+    private func ground(on: (x: Int, y: Int)) -> Bool {
+        area[on.x][on.y]
     }
     
     private func position(for point: CGPoint) -> (x: Int, y: Int) {
