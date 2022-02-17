@@ -1,24 +1,31 @@
 import SpriteKit
 import Combine
 
+private let moving = 8.0
+
 public final class Map {
     public let moveX = PassthroughSubject<CGFloat, Never>()
     public let moveY = PassthroughSubject<CGFloat, Never>()
     public let face = PassthroughSubject<Face, Never>()
     public let state = PassthroughSubject<State, Never>()
     public let direction = PassthroughSubject<Walking, Never>()
-    public let jumping = PassthroughSubject<Jumping, Never>()
+    public let jumping = PassthroughSubject<Int, Never>()
     
-    var items = [Item : (x: Int, y: Int)]()
+    var items = [Item : CGPoint]()
     private(set) var area = [[Bool]]()
-    private(set) var size = CGFloat()
+    private(set) var tile = CGFloat()
+    private var mid = CGFloat()
+    private var size = CGSize()
     
     public init() {
         
     }
     
     public func load(ground: SKTileMapNode) {
-        size = ground.tileSize.width
+        tile = ground.tileSize.width
+        mid = tile / 2
+        size = ground.mapSize
+        
         area = (0 ..< ground.numberOfColumns).map { x in
             (0 ..< ground.numberOfRows).map { y in
                 ground.tileDefinition(atColumn: x, row: y) != nil
@@ -32,87 +39,93 @@ public final class Map {
             y += 1
         }
         
-        items = [.cornelius : (x, y)]
+        items = [.cornelius : .init(x: (.init(x) * tile) + mid, y: .init(y) * tile)]
     }
     
-    public func jump(jumping: Jumping, face: Face) {
-        let position = items[.cornelius]!
+    public func gravity(jumping: Int, face: Face) {
+        let point = items[.cornelius]!
+        let position = position(for: point)
         
-        switch jumping {
-        case .none, .start:
+        if jumping == 0 {
             if position.y > 0 && area[position.x][position.y - 1] {
-                if jumping == .none {
-                    if face != .none {
-                        self.face.send(.none)
-                    }
-                    self.jumping.send(.start)
-                } else {
-                    flying(y: position.y)
-                    self.face.send(.jump)
-                    self.jumping.send(jumping.next)
+                if face != .none {
+                    self.face.send(.none)
                 }
             } else {
-                gravity(y: position.y)
+                let next = point.y - moving
                 
-                if jumping == .none {
-                    self.jumping.send(.start)
+                if next < moving {
+                    state.send(.dead)
+                }
+                
+                if next >= moving {
+                    move(y: next)
                 }
             }
-        default:
-            if face != .jump {
-                self.face.send(.jump)
-            }
+        }
+    }
+    
+    public func jump(jumping: Int, face: Face) {
+        let point = items[.cornelius]!
+        let position = position(for: point)
+        
+        if face != .jump {
+            self.face.send(.jump)
+        }
+        
+        if jumping == 0
+            && position.y > 0 && area[position.x][position.y - 1]
+            || jumping > 0 {
             
             if area[position.x][position.y + 1] {
-                self.jumping.send(.start)
+                self.jumping.send(0)
             } else {
-                flying(y: position.y)
-                self.jumping.send(jumping.next)
+                let next = point.y + moving
+                
+                if next < size.height - moving {
+                    move(y: next)
+                }
+                
+                self.jumping.send(jumping < 20
+                                  ? jumping + 1
+                                  : 0)
             }
         }
     }
     
     public func walk(walking: Walking, face: Face, direction: Walking) {
-        let position = items[.cornelius]!
+        let point = items[.cornelius]!
+        let position = position(for: point)
         
-        if walking != .none {
-            if walking == direction {
-                if position.y > 0 && area[position.x][position.y - 1] {
-                    walk(face: face)
-                }
+        if walking == direction {
+            if position.y > 0 && area[position.x][position.y - 1] {
+                walk(face: face)
+            }
 
-                switch walking {
-                case .left:
-                    if position.x > 1,
-                       !area[position.x - 1][position.y],
-                       !area[position.x - 1][position.y] {
-                        move(x: position.x - 1)
-                    }
-                case .right:
-                    if position.x < area.count - 2,
-                       !area[position.x + 1][position.y],
-                       !area[position.x + 1][position.y] {
-                        move(x: position.x + 1)
-                    }
-                default:
-                    break
+            switch walking {
+            case .left:
+                if point.x > moving,
+                   !area[position.x - 1][position.y] {
+                    move(x: point.x - moving)
                 }
-            } else {
-                self.direction.send(walking)
+            case .right:
+                if point.x < size.width - moving,
+                   !area[position.x + 1][position.y] {
+                    move(x: point.x + moving)
+                }
+            default:
+                break
+            }
+        } else {
+            self.direction.send(walking)
 
-                switch face {
-                case .walk1, .walk2:
-                    self.face.send(.none)
-                default:
-                    break
-                }
+            switch face {
+            case .walk1, .walk2:
+                self.face.send(.none)
+            default:
+                break
             }
         }
-    }
-    
-    public subscript(_ character: Item) -> CGPoint {
-        .init(x: .init(items[character]!.x) * size,
-              y: .init(items[character]!.y) * size)
     }
     
     private func walk(face: Face) {
@@ -124,37 +137,17 @@ public final class Map {
         }
     }
     
-    private func flying(y: Int) -> (x: Int, y: Int) {
-        let next = y + 1
-        
-        if next < area.first!.count - 1 {
-            move(y: next)
-        }
-        
-        return items[.cornelius]!
+    private func move(x: CGFloat) {
+        items[.cornelius]!.x = x
+        moveX.send(items[.cornelius]!.x)
     }
     
-    private func gravity(y: Int) -> (x: Int, y: Int) {
-        let next = y - 1
-        
-        if next < 1 {
-            state.send(.dead)
-        }
-        
-        if next >= 0 {
-            move(y: next)
-        }
-        
-        return items[.cornelius]!
+    private func move(y: CGFloat) {
+        items[.cornelius]!.y = y
+        moveY.send(items[.cornelius]!.y)
     }
     
-    private func move(x: Int) {
-        items[.cornelius] = (x: x, y: items[.cornelius]!.y)
-        moveX.send(self[.cornelius].x)
-    }
-    
-    private func move(y: Int) {
-        items[.cornelius] = (x: items[.cornelius]!.x, y: y)
-        moveY.send(self[.cornelius].y)
+    private func position(for point: CGPoint) -> (x: Int, y: Int) {
+        (x: .init(point.x / tile), y: .init(point.y / tile))
     }
 }
