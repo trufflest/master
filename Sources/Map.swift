@@ -1,7 +1,8 @@
 import SpriteKit
 import Combine
 
-private let moving = 8.0
+private let movingHorizontal = 8.0
+private let movingVertical = 16.0
 
 public final class Map {
     public let moveX = PassthroughSubject<CGFloat, Never>()
@@ -47,18 +48,20 @@ public final class Map {
             let position = position(for: point)
             let below = (x: position.x, y: position.y - 1)
             
-            if ground(on: below) && point.y.truncatingRemainder(dividingBy: tile) == 0 {
+            if position.y > 0,
+               ground(on: below),
+               point.y.truncatingRemainder(dividingBy: tile) == 0 {
                 if walking == .none, face != .none {
                     self.face.send(.none)
                 }
             } else {
-                let next = point.y - moving
+                let next = point.y - movingVertical
                 
-                if next < moving {
+                if next < movingVertical {
                     state.send(.dead)
                 }
                 
-                if next >= moving {
+                if next >= movingVertical {
                     move(y: next)
                 }
             }
@@ -75,16 +78,16 @@ public final class Map {
             self.face.send(.jump)
         }
         
-        if jumping == 0
-            && position.y > 0 && ground(on: below)
-            || jumping > 0 {
+        if jumping == 0,
+           position.y > 0,
+           (ground(on: below) && point.y.truncatingRemainder(dividingBy: tile) == 0) || jumping > 0 {
             
             if ground(on: above) {
                 self.jumping.send(0)
             } else {
-                let next = point.y + moving
+                let next = point.y + movingVertical
                 
-                if next < size.height - moving {
+                if next < size.height - movingVertical {
                     move(y: next)
                 }
                 
@@ -110,17 +113,17 @@ public final class Map {
                 }
             }
 
-            var delta = point.x + moving
+            var delta = point.x + movingHorizontal
             
             if walking == .left {
-                delta = point.x - moving
+                delta = point.x - movingHorizontal
             }
             
             let nextPoint = CGPoint(x: delta, y: point.y)
             let nextPosition = self.position(for: nextPoint)
             
-            if nextPoint.x > moving,
-               nextPoint.x < size.width - moving,
+            if nextPoint.x > movingHorizontal,
+               nextPoint.x < size.width - movingHorizontal,
                !ground(on: nextPosition) {
                 move(x: delta)
             }
