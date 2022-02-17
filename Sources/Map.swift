@@ -10,8 +10,7 @@ public final class Map {
     public let state = PassthroughSubject<State, Never>()
     public let direction = PassthroughSubject<Walking, Never>()
     public let jumping = PassthroughSubject<Int, Never>()
-    
-    var items = [Item : CGPoint]()
+    public internal(set) var items = [Item : CGPoint]()
     private(set) var area = [[Bool]]()
     private(set) var tile = CGFloat()
     private var mid = CGFloat()
