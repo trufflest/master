@@ -114,7 +114,7 @@ public final class Map {
             self.direction.send(walking)
 
             switch face {
-            case .walk1, .walk2:
+            case .walk1_1, .walk1_2, .walk2_1, .walk2_2:
                 self.face.send(.none)
             default:
                 break
