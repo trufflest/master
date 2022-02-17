@@ -44,19 +44,16 @@ public final class Map {
     public func gravity(jumping: Int, walking: Walking, face: Face) {
         if jumping == 0 {
             let point = items[.cornelius]!
-            let below = CGPoint(x: point.x, y: point.y - moving)
             
-            if ground(on: below) {
+            if ground(on: point) {
                 if walking == .none, face != .none {
                     self.face.send(.none)
                 }
             } else {
-                if below.y < moving {
+                if point.y <= moving {
                     state.send(.dead)
-                }
-                
-                if below.y > moving {
-                    move(y: below.y)
+                } else {
+                    move(y: point.y - moving)
                 }
             }
         }
@@ -64,13 +61,12 @@ public final class Map {
     
     public func jump(jumping: Int, face: Face) {
         let point = items[.cornelius]!
-        let below = CGPoint(x: point.x, y: point.y - moving)
         
         if face != .jump {
             self.face.send(.jump)
         }
         
-        if (jumping == 0 && ground(on: below)) || jumping > 0 {
+        if (jumping == 0 && ground(on: point)) || jumping > 0 {
             let above = CGPoint(x: point.x, y: point.y + moving)
             if ground(on: above) {
                 self.jumping.send(0)
@@ -88,10 +84,9 @@ public final class Map {
     
     public func walk(walking: Walking, face: Face, direction: Walking) {
         let point = items[.cornelius]!
-        let below = CGPoint(x: point.x, y: point.y - moving)
         
         if walking == direction {
-            if ground(on: below) {
+            if ground(on: point) {
                 switch face {
                 case .walk1:
                     self.face.send(.walk2)
@@ -138,7 +133,7 @@ public final class Map {
     private func ground(on point: CGPoint) -> Bool {
         point.y > moving
         && point.y.truncatingRemainder(dividingBy: tile) == 0
-        && area(on: point)
+        && area(on: .init(x: point.x, y: point.y - 1))
     }
     
     private func area(on point: CGPoint) -> Bool {
