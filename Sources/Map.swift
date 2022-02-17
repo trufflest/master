@@ -78,9 +78,11 @@ public final class Map {
             self.face.send(.jump)
         }
         
-        if jumping == 0,
-           position.y > 0,
-           (ground(on: below) && point.y.truncatingRemainder(dividingBy: tile) == 0) || jumping > 0 {
+        if position.y > 0,
+           (jumping == 0
+            && ground(on: below)
+            && point.y.truncatingRemainder(dividingBy: tile) == 0)
+            || jumping > 0 {
             
             if ground(on: above) {
                 self.jumping.send(0)
