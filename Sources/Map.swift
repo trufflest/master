@@ -88,10 +88,12 @@ public final class Map {
         if walking == direction {
             if ground(on: point) {
                 switch face {
-                case .walk1:
-                    self.face.send(.walk2)
+                case .walk1_1:
+                    self.face.send(.walk1_2)
+                case .walk1_2:
+                    self.face.send(.walk2_1)
                 default:
-                    self.face.send(.walk1)
+                    self.face.send(.walk1_1)
                 }
             }
 
