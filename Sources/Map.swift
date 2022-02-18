@@ -147,9 +147,9 @@ public final class Map {
     }
     
     private func ceiling(on point: CGPoint) -> Bool {
-        point.y >= size.height - moving
-        || (point.y < size.height - moving
-            && area(on: .init(x: point.x, y: point.y + moving)))
+        point.y >= size.height - (moving + tile)
+        || (point.y < size.height - (moving + tile)
+            && area(on: .init(x: point.x, y: point.y + (moving + tile))))
     }
     
     private func area(on point: CGPoint) -> Bool {
