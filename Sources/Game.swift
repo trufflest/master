@@ -3,7 +3,7 @@ import Combine
 
 private let moving = 8.0
 
-public final class Map {
+public final class Game {
     public let moveX = PassthroughSubject<CGFloat, Never>()
     public let moveY = PassthroughSubject<CGFloat, Never>()
     public let face = PassthroughSubject<Face, Never>()
