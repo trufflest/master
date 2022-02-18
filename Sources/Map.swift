@@ -9,7 +9,7 @@ public final class Map {
     public let face = PassthroughSubject<Face, Never>()
     public let state = PassthroughSubject<State, Never>()
     public let direction = PassthroughSubject<Walking, Never>()
-    public let jumping = PassthroughSubject<Int, Never>()
+    public let jumping = PassthroughSubject<Jumping, Never>()
     public internal(set) var items = [Item : CGPoint]()
     private(set) var area = [[Bool]]()
     private(set) var tile = CGFloat()
@@ -41,8 +41,8 @@ public final class Map {
         items = [.cornelius : .init(x: (.init(x) * tile) + mid, y: .init(y) * tile)]
     }
     
-    public func gravity(jumping: Int, walking: Walking, face: Face) {
-        if jumping < 1 {
+    public func gravity(jumping: Jumping, walking: Walking, face: Face) {
+        if jumping == .over || jumping == .ready {
             let point = items[.cornelius]!
             
             if ground(on: point) {
@@ -50,8 +50,8 @@ public final class Map {
                     self.face.send(.none)
                 }
                 
-                if jumping < 0 {
-                    self.jumping.send(0)
+                if jumping == .over {
+                    self.jumping.send(.ready)
                 }
             } else {
                 if point.y <= moving {
@@ -59,33 +59,46 @@ public final class Map {
                 } else {
                     move(y: point.y - moving)
                     
-                    if jumping == 0 {
-                        self.jumping.send(-1)
+                    if jumping == .ready {
+                        self.jumping.send(.over)
                     }
                 }
             }
         }
     }
     
-    public func jump(jumping: Int, face: Face) {
+    public func jump(jumping: Jumping, face: Face) {
         let point = items[.cornelius]!
         
         if face != .jump {
             self.face.send(.jump)
         }
         
-        if (jumping == 0 && ground(on: point)) || jumping > 0 {
+        if (jumping == .ready && ground(on: point))
+            || (jumping != .ready && jumping != .over) {
+            
             let above = CGPoint(x: point.x, y: point.y + moving)
             if ceiling(on: above) {
-                self.jumping.send(0)
+                if jumping != .ready {
+                    self.jumping.send(.over)
+                }
             } else {
                 if above.y < size.height - moving {
                     move(y: above.y)
                 }
                 
-                self.jumping.send(jumping < 12
-                                  ? jumping + 1
-                                  : 0)
+                switch jumping {
+                case let .counter(counter):
+                    if counter < 12 {
+                        self.jumping.send(.counter(counter + 1))
+                    } else {
+                        self.jumping.send(.over)
+                    }
+                case .ready:
+                    self.jumping.send(.counter(0))
+                default:
+                    break
+                }
             }
         }
     }
