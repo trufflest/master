@@ -89,7 +89,7 @@ public final class Game {
                 
                 switch jumping {
                 case let .counter(counter):
-                    if counter < 12 {
+                    if counter < 11 {
                         self.jumping.send(.counter(counter + 1))
                     } else {
                         self.jumping.send(.over)

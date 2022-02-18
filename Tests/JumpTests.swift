@@ -140,7 +140,7 @@ final class JumpTests: XCTestCase {
             }
             .store(in: &subs)
         
-        game.jump(jumping: .counter(12), face: .jump)
+        game.jump(jumping: .counter(11), face: .jump)
         
         waitForExpectations(timeout: 0.05)
     }
