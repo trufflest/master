@@ -94,7 +94,8 @@ public final class Map {
         let point = items[.cornelius]!
         
         if walking == direction {
-            if ground(on: point) {
+            let grounded = ground(on: point)
+            if grounded {
                 switch face {
                 case .walk1_1:
                     self.face.send(.walk1_2)
@@ -105,10 +106,10 @@ public final class Map {
                 }
             }
 
-            var delta = point.x + moving
+            var delta = point.x + (grounded ? moving : moving / 2)
             
             if walking == .left {
-                delta = point.x - moving
+                delta = point.x - (grounded ? moving : moving / 2)
             }
             
             let nextPoint = CGPoint(x: delta, y: point.y)
