@@ -116,7 +116,7 @@ public final class Map {
             if nextPoint.x > moving,
                nextPoint.x < size.width - moving,
                !area(on: nextPoint),
-               !area(on: .init(x: nextPoint.x, y: nextPoint.y - mid)) {
+               !area(on: .init(x: nextPoint.x, y: nextPoint.y + mid)) {
                 move(x: delta)
             }
         } else {
