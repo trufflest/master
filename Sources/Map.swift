@@ -97,12 +97,20 @@ public final class Map {
             let grounded = ground(on: point)
             if grounded {
                 switch face {
-                case .walk1_1:
-                    self.face.send(.walk1_2)
-                case .walk1_2:
-                    self.face.send(.walk2_1)
+                case let .walk1(counter):
+                    if counter > 1 {
+                        self.face.send(.walk2(0))
+                    } else {
+                        self.face.send(.walk1(counter + 1))
+                    }
+                case let .walk2(counter):
+                    if counter > 1 {
+                        self.face.send(.walk1(0))
+                    } else {
+                        self.face.send(.walk2(counter + 1))
+                    }
                 default:
-                    self.face.send(.walk1_1)
+                    self.face.send(.walk1(0))
                 }
             }
 
@@ -124,7 +132,7 @@ public final class Map {
             self.direction.send(walking)
 
             switch face {
-            case .walk1_1, .walk1_2, .walk2_1, .walk2_2:
+            case .walk1, .walk2:
                 self.face.send(.none)
             default:
                 break
