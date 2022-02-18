@@ -76,7 +76,7 @@ public final class Map {
         
         if (jumping == 0 && ground(on: point)) || jumping > 0 {
             let above = CGPoint(x: point.x, y: point.y + moving)
-            if ground(on: above) {
+            if ceiling(on: above) {
                 self.jumping.send(0)
             } else {
                 if above.y < size.height - moving {
@@ -144,6 +144,12 @@ public final class Map {
         point.y > moving
         && point.y.truncatingRemainder(dividingBy: tile) == 0
         && area(on: .init(x: point.x, y: point.y - 1))
+    }
+    
+    private func ceiling(on point: CGPoint) -> Bool {
+        point.y >= size.height - moving
+        || (point.y < size.height - moving
+            && area(on: .init(x: point.x, y: point.y + moving)))
     }
     
     private func area(on point: CGPoint) -> Bool {
