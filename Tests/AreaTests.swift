@@ -1,13 +1,11 @@
 import XCTest
 import SpriteKit
-import Combine
 @testable import Master
 
 final class AreaTests: XCTestCase {
     private var group: SKTileGroup!
     private var ground: SKTileMapNode!
     private var game: Game!
-    private var subs: Set<AnyCancellable>!
     
     override func setUp() {
         group = .init(tileDefinition: .init())
@@ -16,7 +14,6 @@ final class AreaTests: XCTestCase {
                        rows: 100,
                        tileSize: .init(width: 32, height: 32))
         game = .init()
-        subs = .init()
     }
     
     func testSize() {

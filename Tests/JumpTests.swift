@@ -55,7 +55,7 @@ final class JumpTests: XCTestCase {
         
         game.jump(jumping: .ready, face: .none)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testOnTheUp() {
@@ -83,7 +83,7 @@ final class JumpTests: XCTestCase {
         
         game.jump(jumping: .counter(0), face: .jump)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testJumpEdge() {
@@ -104,7 +104,7 @@ final class JumpTests: XCTestCase {
         
         game.jump(jumping: .ready, face: .none)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testOnTheAirEdge() {
@@ -123,7 +123,7 @@ final class JumpTests: XCTestCase {
         
         game.jump(jumping: .counter(0), face: .jump)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testUpStop() {
@@ -142,7 +142,7 @@ final class JumpTests: XCTestCase {
         
         game.jump(jumping: .counter(12), face: .jump)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testFlyingFace() {
@@ -161,6 +161,6 @@ final class JumpTests: XCTestCase {
         
         game.jump(jumping: .counter(3), face: .none)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
 }

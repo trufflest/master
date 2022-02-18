@@ -35,7 +35,7 @@ final class GravityTests: XCTestCase {
         
         game.gravity(jumping: .ready, walking: .none, face: .none)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testCornerFalling() {
@@ -56,7 +56,7 @@ final class GravityTests: XCTestCase {
         
         game.gravity(jumping: .ready, walking: .none, face: .none)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testCornerNotFalling() {
@@ -77,7 +77,7 @@ final class GravityTests: XCTestCase {
         
         game.gravity(jumping: .ready, walking: .none, face: .none)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testFallingEdge() {
@@ -96,7 +96,7 @@ final class GravityTests: XCTestCase {
         
         game.gravity(jumping: .ready, walking: .none, face: .none)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testOverFell() {
@@ -115,7 +115,7 @@ final class GravityTests: XCTestCase {
         
         game.gravity(jumping: .ready, walking: .none, face: .none)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testGrounding() {
@@ -154,6 +154,6 @@ final class GravityTests: XCTestCase {
         
         game.gravity(jumping: .over, walking: .none, face: .jump)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
 }

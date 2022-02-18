@@ -55,7 +55,7 @@ final class WalkingTests: XCTestCase {
         
         game.walk(walking: .left, face: .walk1(0), direction: .right)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testWalking() {
@@ -85,7 +85,7 @@ final class WalkingTests: XCTestCase {
         
         game.walk(walking: .left, face: .walk1(0), direction: .left)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testWalkingFace() {
@@ -106,7 +106,7 @@ final class WalkingTests: XCTestCase {
         
         game.walk(walking: .left, face: .walk1(2), direction: .left)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testWalkingLeftEdge() {
@@ -127,7 +127,7 @@ final class WalkingTests: XCTestCase {
         
         game.walk(walking: .left, face: .walk1(0), direction: .left)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testWalkingNoGround() {
@@ -155,7 +155,7 @@ final class WalkingTests: XCTestCase {
         
         game.walk(walking: .right, face: .walk1(0), direction: .right)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testWalkingRightEdge() {
@@ -176,7 +176,7 @@ final class WalkingTests: XCTestCase {
         
         game.walk(walking: .right, face: .walk1(0), direction: .right)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
     
     func testWalkingCollision() {
@@ -198,6 +198,6 @@ final class WalkingTests: XCTestCase {
         
         game.walk(walking: .left, face: .walk1(0), direction: .left)
         
-        waitForExpectations(timeout: 0.1)
+        waitForExpectations(timeout: 0.05)
     }
 }
