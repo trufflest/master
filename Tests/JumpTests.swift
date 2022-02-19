@@ -40,7 +40,7 @@ final class JumpTests: XCTestCase {
         game
             .moveY
             .sink {
-                XCTAssertEqual(68, $0)
+                XCTAssertEqual(72, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -68,7 +68,7 @@ final class JumpTests: XCTestCase {
         game
             .moveY
             .sink {
-                XCTAssertEqual(104, $0)
+                XCTAssertEqual(108, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -158,7 +158,7 @@ final class JumpTests: XCTestCase {
             }
             .store(in: &subs)
         
-        game.jump(jumping: .counter(20), face: .jump)
+        game.jump(jumping: .counter(11), face: .jump)
         
         waitForExpectations(timeout: 0.05)
     }

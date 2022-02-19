@@ -9,9 +9,9 @@ public enum Item: Hashable {
     var radius: CGFloat {
         switch self {
         case .cornelius:
-            return 16
+            return 15
         case .truffle:
-            return 12
+            return 10
         case .foe:
             return 0
         }

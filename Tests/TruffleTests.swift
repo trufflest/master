@@ -50,8 +50,8 @@ final class TruffleTests: XCTestCase {
         
         XCTAssertNotNil(node.parent)
         
-        game.items[.cornelius] = .init(x: 234 + (Item.cornelius.radius - 1) + 12,
-                                       y: 645 - (Item.cornelius.radius - 1) + 12)
+        game.items[.cornelius] = .init(x: 234 + (Item.cornelius.radius - 1) + 10,
+                                       y: 645 + 16 - (Item.cornelius.radius - 1) + 10)
         XCTAssertEqual(5, game.items.count)
         
         game
@@ -72,8 +72,8 @@ final class TruffleTests: XCTestCase {
         let expect = expectation(description: "")
         expect.isInverted = true
         
-        game.items[.cornelius] = .init(x: 234 + Item.cornelius.radius + 12,
-                                       y: 645 + 16 - Item.cornelius.radius + 12)
+        game.items[.cornelius] = .init(x: 234 + Item.cornelius.radius + 10,
+                                       y: 645 + 16 - Item.cornelius.radius + 10)
         
         game
             .truffle

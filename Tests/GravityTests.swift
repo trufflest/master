@@ -28,7 +28,7 @@ final class GravityTests: XCTestCase {
         game
             .moveY
             .sink {
-                XCTAssertEqual(96, $0)
+                XCTAssertEqual(92, $0)
                 expect.fulfill()
             }
             .store(in: &subs)
@@ -49,7 +49,7 @@ final class GravityTests: XCTestCase {
         game
             .moveY
             .sink {
-                XCTAssertEqual(156, $0)
+                XCTAssertEqual(152, $0)
                 expect.fulfill()
             }
             .store(in: &subs)
