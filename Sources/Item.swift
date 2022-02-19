@@ -18,8 +18,7 @@ public enum Item: Hashable {
     }
     
     func collides(at: CGPoint, with: Item, position: CGPoint) -> Bool {
-        print("\(abs(at.x - position.x)) : \(abs(at.y - position.y))")
-        return abs(at.x - position.x) < radius + with.radius
+        abs(at.x - position.x) < radius + with.radius
         && abs(at.y - position.y) < radius + with.radius
     }
 }
