@@ -157,10 +157,10 @@ public final class Game {
                 }
             }
 
-            var delta = point.x + (grounded ? moving : moving / 2)
+            var delta = point.x + (grounded ? moving : moving * 2)
             
             if walking == .left {
-                delta = point.x - (grounded ? moving : moving / 2)
+                delta = point.x - (grounded ? moving : moving * 2)
             }
             
             let nextPoint = CGPoint(x: delta, y: point.y)
