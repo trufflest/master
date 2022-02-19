@@ -1,7 +1,7 @@
 import SpriteKit
 import Combine
 
-private let moving = 8.0
+private let moving = 4.0
 
 public final class Game {
     public let moveX = PassthroughSubject<CGFloat, Never>()
