@@ -40,7 +40,7 @@ final class JumpTests: XCTestCase {
         game
             .moveY
             .sink {
-                XCTAssertEqual(72, $0)
+                XCTAssertEqual(68, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -68,7 +68,7 @@ final class JumpTests: XCTestCase {
         game
             .moveY
             .sink {
-                XCTAssertEqual(108, $0)
+                XCTAssertEqual(104, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -87,22 +87,31 @@ final class JumpTests: XCTestCase {
     }
     
     func testJumpEdge() {
-        let expect = expectation(description: "")
-        expect.isInverted = true
+        let expectJump = expectation(description: "")
+        let expectMove = expectation(description: "")
+        expectMove.isInverted = true
         
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 98)
         
         game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 5 * 32, y: 99 * 32)
+        game.items[.cornelius] = .init(x: 5 * 32, y: 99 * 32 - 4)
+    
+        game
+            .jumping
+            .sink {
+                XCTAssertEqual(.over, $0)
+                expectJump.fulfill()
+            }
+            .store(in: &subs)
         
         game
             .moveY
             .sink { _ in
-                expect.fulfill()
+                expectMove.fulfill()
             }
             .store(in: &subs)
         
-        game.jump(jumping: .ready, face: .none)
+        game.jump(jumping: .counter(1), face: .none)
         
         waitForExpectations(timeout: 0.05)
     }
@@ -127,7 +136,9 @@ final class JumpTests: XCTestCase {
     }
     
     func testUpStop() {
-        let expect = expectation(description: "")
+        let expectJump = expectation(description: "")
+        let expectMove = expectation(description: "")
+        expectMove.isInverted = true
         
         game.load(ground: ground)
         game.items[.cornelius] = .init(x: 100, y: 100)
@@ -136,11 +147,18 @@ final class JumpTests: XCTestCase {
             .jumping
             .sink {
                 XCTAssertEqual(.over, $0)
-                expect.fulfill()
+                expectJump.fulfill()
             }
             .store(in: &subs)
         
-        game.jump(jumping: .counter(11), face: .jump)
+        game
+            .moveY
+            .sink { _ in
+                expectMove.fulfill()
+            }
+            .store(in: &subs)
+        
+        game.jump(jumping: .counter(20), face: .jump)
         
         waitForExpectations(timeout: 0.05)
     }

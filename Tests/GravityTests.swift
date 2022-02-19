@@ -28,7 +28,7 @@ final class GravityTests: XCTestCase {
         game
             .moveY
             .sink {
-                XCTAssertEqual(92, $0)
+                XCTAssertEqual(96, $0)
                 expect.fulfill()
             }
             .store(in: &subs)
@@ -49,7 +49,7 @@ final class GravityTests: XCTestCase {
         game
             .moveY
             .sink {
-                XCTAssertEqual(152, $0)
+                XCTAssertEqual(156, $0)
                 expect.fulfill()
             }
             .store(in: &subs)
@@ -81,35 +81,25 @@ final class GravityTests: XCTestCase {
     }
     
     func testFallingEdge() {
-        let expect = expectation(description: "")
-        expect.isInverted = true
+        let expectState = expectation(description: "")
+        let expectMove = expectation(description: "")
+        expectMove.isInverted = true
         
         game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 100, y: 8)
+        game.items[.cornelius] = .init(x: 100, y: 4)
         
         game
             .moveY
             .sink { _ in
-                expect.fulfill()
+                expectMove.fulfill()
             }
             .store(in: &subs)
-        
-        game.gravity(jumping: .ready, walking: .none, face: .none)
-        
-        waitForExpectations(timeout: 0.05)
-    }
-    
-    func testOverFell() {
-        let expect = expectation(description: "")
-        
-        game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 100, y: 8)
         
         game
             .state
             .sink {
                 XCTAssertEqual(.dead, $0)
-                expect.fulfill()
+                expectState.fulfill()
             }
             .store(in: &subs)
         

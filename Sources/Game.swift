@@ -1,7 +1,7 @@
 import SpriteKit
 import Combine
 
-private let moving = 2.0
+private let moving = 4.0
 
 public final class Game {
     public let moveX = PassthroughSubject<CGFloat, Never>()
@@ -108,23 +108,22 @@ public final class Game {
             || (jumping != .ready && jumping != .over) {
             
             let above = CGPoint(x: point.x, y: point.y + moving)
-            if ceiling(on: above) {
+            if ceiling(on: above) || above.y >= size.height - tile {
                 if jumping != .ready {
                     self.jumping.send(.over)
                 }
             } else {
-                if above.y < size.height - moving {
-                    if case let .counter(counter) = jumping,
-                       counter != 12 {
-                        move(y: above.y)
-                    } else {
+                if case let .counter(counter) = jumping {
+                    if counter != 20 {
                         move(y: above.y)
                     }
+                } else {
+                    move(y: above.y)
                 }
                 
                 switch jumping {
                 case let .counter(counter):
-                    if counter < 12 {
+                    if counter < 20 {
                         self.jumping.send(.counter(counter + 1))
                     } else {
                         self.jumping.send(.over)

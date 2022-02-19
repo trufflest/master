@@ -78,7 +78,7 @@ final class WalkingTests: XCTestCase {
         game
             .moveX
             .sink {
-                XCTAssertEqual(184, $0)
+                XCTAssertEqual(188, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -116,7 +116,7 @@ final class WalkingTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 0, row: 4)
         
         game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 16, y: 32 * 5)
+        game.items[.cornelius] = .init(x: 8, y: 32 * 5)
         
         game
             .moveX
@@ -165,7 +165,7 @@ final class WalkingTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 199, row: 4)
         
         game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 32 * 199 + 16, y: 32 * 5)
+        game.items[.cornelius] = .init(x: 32 * 199 + 24, y: 32 * 5)
         
         game
             .moveX
