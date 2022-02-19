@@ -52,7 +52,8 @@ public final class Game {
     
     public func contact() {
         let items = items
-        let cornelius = items[.cornelius]!
+        var cornelius = items[.cornelius]!
+        cornelius.y += mid
         
         items
             .filter {
@@ -87,7 +88,7 @@ public final class Game {
                 if point.y <= moving {
                     state.send(.dead)
                 } else {
-                    move(y: point.y - moving)
+                    move(y: point.y - (moving * 2))
                     
                     if jumping == .ready {
                         self.jumping.send(.over)
@@ -107,7 +108,7 @@ public final class Game {
         if (jumping == .ready && ground(on: point))
             || (jumping != .ready && jumping != .over) {
             
-            let above = CGPoint(x: point.x, y: point.y + moving)
+            let above = CGPoint(x: point.x, y: point.y + (moving * 2))
             if ceiling(on: above) || above.y >= size.height - tile {
                 if jumping != .ready {
                     self.jumping.send(.over)

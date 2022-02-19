@@ -73,7 +73,7 @@ final class TruffleTests: XCTestCase {
         expect.isInverted = true
         
         game.items[.cornelius] = .init(x: 234 + Item.cornelius.radius + 12,
-                                       y: 645 - Item.cornelius.radius + 12)
+                                       y: 645 + 16 - Item.cornelius.radius + 12)
         
         game
             .truffle
