@@ -39,7 +39,7 @@ public final class Game {
             y += 1
         }
         
-        items = [.cornelius : .init(x: (.init(x) * tile) + mid, y: .init(y) * tile)]
+        items[.cornelius] = .init(x: (.init(x) * tile) + mid, y: .init(y) * tile)
     }
     
     public func load(truffles: SKNode) {
