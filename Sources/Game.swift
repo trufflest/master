@@ -10,6 +10,7 @@ public final class Game {
     public let state = PassthroughSubject<State, Never>()
     public let direction = PassthroughSubject<Walking, Never>()
     public let jumping = PassthroughSubject<Jumping, Never>()
+    public let truffle = PassthroughSubject<SKNode, Never>()
     public internal(set) var items = [Item : CGPoint]()
     private(set) var area = [[Bool]]()
     private(set) var tile = CGFloat()
@@ -39,6 +40,35 @@ public final class Game {
         }
         
         items = [.cornelius : .init(x: (.init(x) * tile) + mid, y: .init(y) * tile)]
+    }
+    
+    public func load(truffles: SKNode) {
+        truffles
+            .children
+            .forEach {
+                items[.truffle($0)] = $0.position
+            }
+    }
+    
+    public func contact() {
+        let items = items
+        let cornelius = items[.cornelius]!
+        
+        items
+            .filter {
+                $0.key != .cornelius
+            }
+            .forEach { item, position in
+                if item.collides(at: position, with: .cornelius, position: cornelius) {
+                    switch item {
+                    case let .truffle(truffle):
+                        self.items.removeValue(forKey: item)
+                        self.truffle.send(truffle)
+                    default:
+                        break
+                    }
+                }
+            }
     }
     
     public func gravity(jumping: Jumping, walking: Walking, face: Face) {
