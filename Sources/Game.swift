@@ -114,12 +114,17 @@ public final class Game {
                 }
             } else {
                 if above.y < size.height - moving {
-                    move(y: above.y)
+                    if case let .counter(counter) = jumping,
+                       counter != 12 {
+                        move(y: above.y)
+                    } else {
+                        move(y: above.y)
+                    }
                 }
                 
                 switch jumping {
                 case let .counter(counter):
-                    if counter < 11 {
+                    if counter < 12 {
                         self.jumping.send(.counter(counter + 1))
                     } else {
                         self.jumping.send(.over)
@@ -157,10 +162,10 @@ public final class Game {
                 }
             }
 
-            var delta = point.x + (grounded ? moving : moving * 2)
+            var delta = point.x + (grounded ? moving : moving / 2)
             
             if walking == .left {
-                delta = point.x - (grounded ? moving : moving * 2)
+                delta = point.x - (grounded ? moving : moving / 2)
             }
             
             let nextPoint = CGPoint(x: delta, y: point.y)
