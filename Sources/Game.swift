@@ -165,7 +165,7 @@ public final class Game {
 
             var distance = moving
             
-            if grounded,
+            if !grounded,
                point.y > tile + moving,
                !ground(on: .init(x: point.x, y: point.y - tile)) {
                 distance *= 1.5

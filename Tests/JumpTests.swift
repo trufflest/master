@@ -135,6 +135,34 @@ final class JumpTests: XCTestCase {
         waitForExpectations(timeout: 0.05)
     }
     
+    func testUpRemainOnAir() {
+        let expectJump = expectation(description: "")
+        let expectMove = expectation(description: "")
+        expectMove.isInverted = true
+        
+        game.load(ground: ground)
+        game.items[.cornelius] = .init(x: 100, y: 100)
+        
+        game
+            .jumping
+            .sink {
+                XCTAssertEqual(.counter(12), $0)
+                expectJump.fulfill()
+            }
+            .store(in: &subs)
+        
+        game
+            .moveY
+            .sink { _ in
+                expectMove.fulfill()
+            }
+            .store(in: &subs)
+        
+        game.jump(jumping: .counter(11), face: .jump)
+        
+        waitForExpectations(timeout: 0.05)
+    }
+    
     func testUpStop() {
         let expectJump = expectation(description: "")
         let expectMove = expectation(description: "")
@@ -158,7 +186,7 @@ final class JumpTests: XCTestCase {
             }
             .store(in: &subs)
         
-        game.jump(jumping: .counter(11), face: .jump)
+        game.jump(jumping: .counter(14), face: .jump)
         
         waitForExpectations(timeout: 0.05)
     }

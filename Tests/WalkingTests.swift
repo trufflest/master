@@ -148,7 +148,7 @@ final class WalkingTests: XCTestCase {
         game
             .moveX
             .sink {
-                XCTAssertEqual(104, $0)
+                XCTAssertEqual(106, $0)
                 expectMove.fulfill()
             }
             .store(in: &subs)
@@ -197,6 +197,27 @@ final class WalkingTests: XCTestCase {
             .store(in: &subs)
         
         game.walk(walking: .left, face: .walk1(0), direction: .left)
+        
+        waitForExpectations(timeout: 0.05)
+    }
+    
+    func testWalkingCloseToFloor() {
+        let expect = expectation(description: "")
+        
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 3)
+        
+        game.load(ground: ground)
+        game.items[.cornelius] = .init(x: 32 * 6, y: 32 * 5)
+        
+        game
+            .moveX
+            .sink {
+                XCTAssertEqual(188, $0)
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        game.walk(walking: .left, face: .jump, direction: .left)
         
         waitForExpectations(timeout: 0.05)
     }
