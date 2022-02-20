@@ -109,7 +109,7 @@ public final class Game {
             || (jumping != .ready && jumping != .over) {
             
             let above = CGPoint(x: point.x, y: point.y + (moving * 2))
-            if ceiling(on: above) || above.y >= size.height - tile {
+            if ceiling(on: above) || above.y > size.height - mid {
                 if jumping != .ready {
                     self.jumping.send(.over)
                 }

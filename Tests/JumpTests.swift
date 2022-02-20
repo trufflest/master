@@ -94,7 +94,7 @@ final class JumpTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 98)
         
         game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 5 * 32, y: 99 * 32 - 4)
+        game.items[.cornelius] = .init(x: 5 * 32, y: 100 * 32 - 28)
     
         game
             .jumping
@@ -121,7 +121,7 @@ final class JumpTests: XCTestCase {
         expect.isInverted = true
         
         game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 5 * 32, y: 99 * 32)
+        game.items[.cornelius] = .init(x: 5 * 32, y: 100 * 32 - 28)
         
         game
             .moveY
