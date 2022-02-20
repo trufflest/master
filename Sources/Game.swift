@@ -115,7 +115,7 @@ public final class Game {
                 }
             } else {
                 if case let .counter(counter) = jumping {
-                    if counter != 11 {
+                    if counter <= 10 {
                         move(y: above.y)
                     }
                 } else {
@@ -124,7 +124,7 @@ public final class Game {
                 
                 switch jumping {
                 case let .counter(counter):
-                    if counter < 11 {
+                    if counter < 12 {
                         self.jumping.send(.counter(counter + 1))
                     } else {
                         self.jumping.send(.over)
