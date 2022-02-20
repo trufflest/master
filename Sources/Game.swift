@@ -124,7 +124,7 @@ public final class Game {
                 
                 switch jumping {
                 case let .counter(counter):
-                    if counter < 25 {
+                    if counter < 15 {
                         self.jumping.send(.counter(counter + 1))
                     } else {
                         self.jumping.send(.over)
@@ -143,6 +143,7 @@ public final class Game {
         
         if walking == direction {
             let grounded = ground(on: point)
+            
             if grounded {
                 switch face {
                 case let .walk1(counter):
@@ -162,10 +163,18 @@ public final class Game {
                 }
             }
 
-            var delta = point.x + (grounded ? moving : moving * 1.5)
+            var distance = moving
+            
+            if grounded,
+               point.y > tile + moving,
+               !ground(on: .init(x: point.x, y: point.y - tile)) {
+                distance *= 1.5
+            }
+            
+            var delta = point.x + distance
             
             if walking == .left {
-                delta = point.x - (grounded ? moving : moving * 1.5)
+                delta = point.x - distance
             }
             
             let nextPoint = CGPoint(x: delta, y: point.y)
