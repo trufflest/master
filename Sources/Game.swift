@@ -96,7 +96,7 @@ public final class Game {
                 }
             } else {
                 if point.y <= moving {
-                    state.send(.dead)
+                    state.send(.fell)
                 } else {
                     move(y: point.y - (moving * 2))
                     

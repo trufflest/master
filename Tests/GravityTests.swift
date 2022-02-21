@@ -98,7 +98,7 @@ final class GravityTests: XCTestCase {
         game
             .state
             .sink {
-                XCTAssertEqual(.dead, $0)
+                XCTAssertEqual(.fell, $0)
                 expectState.fulfill()
             }
             .store(in: &subs)
