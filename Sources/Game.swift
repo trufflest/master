@@ -59,28 +59,29 @@ public final class Game {
     }
     
     public func contact() {
-        let items = items
         var cornelius = items[.cornelius]!
         cornelius.y += mid
         
-        items
+        let items = items
             .filter {
                 $0.key != .cornelius
             }
-            .forEach { item, position in
-                if item.collides(at: position, with: .cornelius, position: cornelius) {
-                    switch item {
-                    case let .truffle(truffle):
-                        self.items.removeValue(forKey: item)
-                        self.truffle.send(truffle)
-                    case .spike:
-                        self.state.send(.dead)
-                        self.face.send(.dead)
-                    default:
-                        break
-                    }
+        
+    outer: for item in items {
+            if item.key.collides(at: item.value, with: .cornelius, position: cornelius) {
+                switch item.key {
+                case let .truffle(truffle):
+                    self.items.removeValue(forKey: item.key)
+                    self.truffle.send(truffle)
+                case .spike:
+                    self.state.send(.dead)
+                    self.face.send(.dead)
+                    break outer
+                default:
+                    break
                 }
             }
+        }
     }
     
     public func gravity(jumping: Jumping, walking: Walking, face: Face) {

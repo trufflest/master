@@ -13,7 +13,7 @@ final class SpikeTests: XCTestCase {
         
         [CGPoint(x: 300, y: 300),
          .init(x: 100, y: 100),
-         .init(x: 1000, y: 1000),
+         .init(x: 101, y: 101),
          .init(x: 234, y: 645)]
             .map {
                 let spike = SKNode()
@@ -74,6 +74,34 @@ final class SpikeTests: XCTestCase {
             .state
             .sink { _ in
                 expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        game.contact()
+        
+        waitForExpectations(timeout: 0.05)
+    }
+    
+    func testDoubleContact() {
+        let expectState = expectation(description: "")
+        let expectFace = expectation(description: "")
+        
+        game.items[.cornelius] = .init(x: 100 + (15 - 1) + 7,
+                                       y: 100 - 16 + (15 - 1) + 9)
+        
+        game
+            .state
+            .sink {
+                XCTAssertEqual(.dead, $0)
+                expectState.fulfill()
+            }
+            .store(in: &subs)
+        
+        game
+            .face
+            .sink {
+                XCTAssertEqual(.dead, $0)
+                expectFace.fulfill()
             }
             .store(in: &subs)
         
