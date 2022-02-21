@@ -50,6 +50,14 @@ public final class Game {
             }
     }
     
+    public func load(spikes: SKNode) {
+        spikes
+            .children
+            .forEach {
+                items[.spike(.init())] = $0.position
+            }
+    }
+    
     public func contact() {
         let items = items
         var cornelius = items[.cornelius]!
@@ -65,6 +73,8 @@ public final class Game {
                     case let .truffle(truffle):
                         self.items.removeValue(forKey: item)
                         self.truffle.send(truffle)
+                    case .spike:
+                        self.state.send(.dead)
                     default:
                         break
                     }

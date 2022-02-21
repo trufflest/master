@@ -3,29 +3,29 @@ import SpriteKit
 import Combine
 @testable import Master
 
-final class TruffleTests: XCTestCase {
+final class SpikeTests: XCTestCase {
     private var game: Game!
     private var subs = Set<AnyCancellable>()
-    private var truffles: SKNode!
+    private var spikes: SKNode!
     
     override func setUp() {
-        truffles = .init()
+        spikes = .init()
         
         [CGPoint(x: 300, y: 300),
          .init(x: 100, y: 100),
          .init(x: 1000, y: 1000),
          .init(x: 234, y: 645)]
             .map {
-                let truffle = SKNode()
-                truffle.position = $0
-                return truffle
+                let spike = SKNode()
+                spike.position = $0
+                return spike
             }
             .forEach {
-                truffles.addChild($0)
+                spikes.addChild($0)
             }
         
         game = .init()
-        game.load(truffles: truffles)
+        game.load(spikes: spikes)
     }
     
     func testLoad() {
@@ -35,30 +35,16 @@ final class TruffleTests: XCTestCase {
         })
     }
     
-    func testPickup() {
+    func testContact() {
         let expect = expectation(description: "")
         
-        let truffle = game.items.first {
-            $0.1 == .init(x: 234, y: 645)
-        }!
-        
-        var node: SKNode!
-        
-        if case let .truffle(truffle) = truffle.key {
-            node = truffle
-        }
-        
-        XCTAssertNotNil(node.parent)
-        
-        game.items[.cornelius] = .init(x: 234 + (15 - 1) + 10,
-                                       y: 645 - 16 + (15 - 1) + 10)
-        XCTAssertEqual(5, game.items.count)
+        game.items[.cornelius] = .init(x: 234 + (15 - 1) + 7,
+                                       y: 645 - 16 + (15 - 1) + 9)
         
         game
-            .truffle
+            .state
             .sink {
-                XCTAssertEqual(4, self.game.items.count)
-                XCTAssertEqual(.init(x: 234, y: 645), $0.position)
+                XCTAssertEqual(.dead, $0)
                 expect.fulfill()
             }
             .store(in: &subs)
@@ -72,11 +58,11 @@ final class TruffleTests: XCTestCase {
         let expect = expectation(description: "")
         expect.isInverted = true
         
-        game.items[.cornelius] = .init(x: 234 + 15 + 10,
-                                       y: 645 - 16 + 15 + 10)
+        game.items[.cornelius] = .init(x: 234 + 15 + 7,
+                                       y: 645 - 16 + 15 + 9)
         
         game
-            .truffle
+            .state
             .sink { _ in
                 expect.fulfill()
             }
