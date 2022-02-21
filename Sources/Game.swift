@@ -75,6 +75,7 @@ public final class Game {
                         self.truffle.send(truffle)
                     case .spike:
                         self.state.send(.dead)
+                        self.face.send(.dead)
                     default:
                         break
                     }

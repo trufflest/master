@@ -36,7 +36,8 @@ final class SpikeTests: XCTestCase {
     }
     
     func testContact() {
-        let expect = expectation(description: "")
+        let expectState = expectation(description: "")
+        let expectFace = expectation(description: "")
         
         game.items[.cornelius] = .init(x: 234 + (15 - 1) + 7,
                                        y: 645 - 16 + (15 - 1) + 9)
@@ -45,7 +46,15 @@ final class SpikeTests: XCTestCase {
             .state
             .sink {
                 XCTAssertEqual(.dead, $0)
-                expect.fulfill()
+                expectState.fulfill()
+            }
+            .store(in: &subs)
+        
+        game
+            .face
+            .sink {
+                XCTAssertEqual(.dead, $0)
+                expectFace.fulfill()
             }
             .store(in: &subs)
         
