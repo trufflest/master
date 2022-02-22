@@ -53,8 +53,9 @@ public final class Game {
     public func load(spikes: SKNode) {
         spikes
             .children
+            .enumerated()
             .forEach {
-                items[.spike(.init())] = $0.position
+                items[.spike($0.0)] = $0.1.position
             }
     }
     

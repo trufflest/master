@@ -3,7 +3,7 @@ import SpriteKit
 public enum Item: Hashable {
     case
     cornelius,
-    spike(UUID),
+    spike(Int),
     foe(Int),
     truffle(SKNode)
     
