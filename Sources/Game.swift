@@ -31,15 +31,6 @@ public final class Game {
                 ground.tileDefinition(atColumn: x, row: y) != nil
             }
         }
-        
-        var y = 0
-        let x = 4
-        
-        while area[x].count > y + 1, area[x][y] {
-            y += 1
-        }
-        
-//        items[.cornelius] = .init(x: (.init(x) * tile) + mid, y: .init(y) * tile)
     }
     
     public func load(truffles: SKNode) {
@@ -61,6 +52,10 @@ public final class Game {
     
     public func add(cornelius: SKNode) {
         items[.cornelius] = cornelius.position
+    }
+    
+    public func add(lizard: SKNode) {
+        items[.lizard(lizard)] = lizard.position
     }
     
     public func contact() {
