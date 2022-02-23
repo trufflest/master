@@ -1,4 +1,4 @@
-public enum Face: Equatable {
+public enum Face: Hashable {
     case
     none,
     jump,
