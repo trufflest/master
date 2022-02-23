@@ -4,7 +4,7 @@ public enum Item: Hashable {
     case
     cornelius,
     spike(Int),
-    lizard(SKNode),
+    foe(Foe, SKNode),
     truffle(SKNode)
     
     func collides(at: CGPoint, with: Item, position: CGPoint) -> Bool {
@@ -20,8 +20,8 @@ public enum Item: Hashable {
             return 10
         case .spike:
             return 7
-        case .lizard:
-            return 0
+        case let .foe(foe, _):
+            return foe.horizontal
         }
     }
     
@@ -33,8 +33,8 @@ public enum Item: Hashable {
             return 10
         case .spike:
             return 9
-        case .lizard:
-            return 0
+        case let .foe(foe, _):
+            return foe.vertical
         }
     }
 }

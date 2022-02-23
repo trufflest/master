@@ -54,7 +54,7 @@ public final class Game {
         lizards
             .children
             .forEach {
-                items[.lizard($0)] = $0.position
+                items[.foe(.lizard, $0)] = $0.position
             }
     }
     
@@ -78,6 +78,10 @@ public final class Game {
                     self.items.removeValue(forKey: item.key)
                     self.truffle.send(truffle)
                 case .spike:
+                    self.state.send(.dead)
+                    self.face.send(.dead)
+                    break outer
+                case let .foe(foe, node):
                     self.state.send(.dead)
                     self.face.send(.dead)
                     break outer
