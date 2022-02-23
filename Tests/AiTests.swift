@@ -6,6 +6,7 @@ final class AiTests: XCTestCase {
     private var group: SKTileGroup!
     private var ground: SKTileMapNode!
     private var game: Game!
+    private var foe: Character!
     
     override func setUp() {
         group = .init(tileDefinition: .init())
@@ -13,80 +14,51 @@ final class AiTests: XCTestCase {
                        columns: 200,
                        rows: 100,
                        tileSize: .init(width: 32, height: 32))
+        foe = .init()
         game = .init()
     }
 
     func testDirection() {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
-        
-        let foes = SKNode()
-        let foe = Character()
+        game.load(ground: ground)
+        game.items[.foe(.lizard, foe)] = .init(x: 32 * 6, y: 32 * 5)
         foe.direction = .right
         foe.face = .walk1(0)
-        foe.position = .init(x: 32 * 6, y: 32 * 5)
-        foes.addChild(foe)
+        foe.position.x = 32 * 6
         
-        game.load(lizards: foes)
-        game.load(ground: ground)
-
         game.foe(foe: .foe(.lizard, foe), character: foe, walking: .left)
 
         XCTAssertEqual(.none, foe.face)
         XCTAssertEqual(.left, foe.direction)
-        XCTAssertEqual(.init(x: 32 * 6, y: 32 * 5), foe.position)
+        XCTAssertEqual(32 * 6, foe.position.x)
     }
-    /*
+    
     func testWalking() {
-        let expectFace = expectation(description: "")
-        let expectMove = expectation(description: "")
-        
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
-        
         game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 32 * 6, y: 32 * 5)
+        game.items[.foe(.lizard, foe)] = .init(x: 32 * 6, y: 32 * 5)
+        foe.direction = .left
+        foe.face = .walk1(0)
         
-        game
-            .face
-            .sink {
-                XCTAssertEqual(.walk1(1), $0)
-                expectFace.fulfill()
-            }
-            .store(in: &subs)
+        game.foe(foe: .foe(.lizard, foe), character: foe, walking: .left)
         
-        game
-            .moveX
-            .sink {
-                XCTAssertEqual(188, $0)
-                expectMove.fulfill()
-            }
-            .store(in: &subs)
-        
-        game.walk(walking: .left, face: .walk1(0), direction: .left)
-        
-        waitForExpectations(timeout: 0.05)
+        XCTAssertEqual(.walk1(1), foe.face)
+        XCTAssertEqual(188, foe.position.x)
     }
     
     func testWalkingFace() {
-        let expect = expectation(description: "")
-        
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
-        
         game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 32 * 6, y: 32 * 5)
+        game.items[.foe(.lizard, foe)] = .init(x: 32 * 6, y: 32 * 5)
+        foe.direction = .left
+        foe.face = .walk1(2)
+
+        game.foe(foe: .foe(.lizard, foe), character: foe, walking: .left)
         
-        game
-            .face
-            .sink {
-                XCTAssertEqual(.walk2(0), $0)
-                expect.fulfill()
-            }
-            .store(in: &subs)
+        XCTAssertEqual(.walk2(0), foe.face)
         
-        game.walk(walking: .left, face: .walk1(2), direction: .left)
-        
-        waitForExpectations(timeout: 0.05)
     }
-    
+    /*
     func testWalkingLeftEdge() {
         let expect = expectation(description: "")
         expect.isInverted = true
