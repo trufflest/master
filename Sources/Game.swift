@@ -54,7 +54,7 @@ public final class Game {
         lizards
             .children
             .forEach {
-                items[.foe(.lizard, $0)] = $0.position
+                items[.foe(.lizard, $0 as! Character)] = $0.position
             }
     }
     
@@ -81,7 +81,7 @@ public final class Game {
                     self.state.send(.dead)
                     self.face.send(.dead)
                     break outer
-                case let .foe(foe, node):
+                case .foe:
                     self.state.send(.dead)
                     self.face.send(.dead)
                     break outer
@@ -90,6 +90,18 @@ public final class Game {
                 }
             }
         }
+    }
+    
+    public func foes() {
+        items
+            .forEach {
+                switch $0.key {
+                case let .foe(_, character):
+                    foe(foe: $0.key, character: character, walking: randomer(current: character.direction))
+                default:
+                    break
+                }
+            }
     }
     
     public func gravity(jumping: Jumping, walking: Walking, face: Face) {
@@ -159,7 +171,50 @@ public final class Game {
     }
     
     public func walk(walking: Walking, face: Face, direction: Walking) {
-        let point = items[.cornelius]!
+        let (face, direction, x) = walk(point: items[.cornelius]!, walking: walking, face: face, direction: direction)
+        
+        face
+            .map {
+                self.face.send($0)
+            }
+        
+        direction
+            .map {
+                self.direction.send($0)
+            }
+        
+        x
+            .map {
+                items[.cornelius]!.x = $0
+                moveX.send($0)
+            }
+    }
+    
+    func foe(foe: Item, character: Character, walking: Walking) {
+        let (face, direction, x) = walk(point: items[foe]!,
+                                        walking: walking,
+                                        face: character.face,
+                                        direction: character.direction)
+        
+        face
+            .map {
+                character.face = $0
+            }
+        
+        direction
+            .map {
+                character.direction = $0
+            }
+        
+        x
+            .map {
+                items[foe]!.x = $0
+                character.position.x = $0
+            }
+    }
+    
+    private func walk(point: CGPoint, walking: Walking, face: Face, direction: Walking) -> (face: Face?, direction: Walking?, x: CGFloat?) {
+        var result: (face: Face?, direction: Walking?, x: CGFloat?) = (nil, nil, nil)
         
         if walking == direction {
             let grounded = ground(on: point)
@@ -168,18 +223,18 @@ public final class Game {
                 switch face {
                 case let .walk1(counter):
                     if counter > 1 {
-                        self.face.send(.walk2(0))
+                        result.face = .walk2(0)
                     } else {
-                        self.face.send(.walk1(counter + 1))
+                        result.face = .walk1(counter + 1)
                     }
                 case let .walk2(counter):
                     if counter > 1 {
-                        self.face.send(.walk1(0))
+                        result.face = .walk1(0)
                     } else {
-                        self.face.send(.walk2(counter + 1))
+                        result.face = .walk2(counter + 1)
                     }
                 default:
-                    self.face.send(.walk1(0))
+                    result.face = .walk1(0)
                 }
             }
 
@@ -203,23 +258,44 @@ public final class Game {
                nextPoint.x < size.width - moving,
                !area(on: nextPoint),
                !area(on: .init(x: nextPoint.x, y: nextPoint.y + mid)) {
-                move(x: delta)
+                result.x = delta
             }
         } else {
-            self.direction.send(walking)
+            result.direction = walking
 
             switch face {
             case .walk1, .walk2:
-                self.face.send(.none)
+                result.face = Face.none
             default:
                 break
             }
         }
+        return result
     }
     
-    private func move(x: CGFloat) {
-        items[.cornelius]!.x = x
-        moveX.send(items[.cornelius]!.x)
+    private func randomer(current: Walking) -> Walking {
+        switch Int.random(in: 0 ..< 10) {
+        case 0 ..< 6:
+            return current
+        case 6 ..< 8:
+            switch current {
+            case .none:
+                return .left
+            case .left:
+                return .right
+            case .right:
+                return .none
+            }
+        default:
+            switch current {
+            case .none:
+                return .right
+            case .left:
+                return .none
+            case .right:
+                return .left
+            }
+        }
     }
     
     private func move(y: CGFloat) {

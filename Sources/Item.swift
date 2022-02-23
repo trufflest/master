@@ -4,7 +4,7 @@ public enum Item: Hashable {
     case
     cornelius,
     spike(Int),
-    foe(Foe, SKNode),
+    foe(Foe, Character),
     truffle(SKNode)
     
     func collides(at: CGPoint, with: Item, position: CGPoint) -> Bool {

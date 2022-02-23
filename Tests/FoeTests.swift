@@ -18,7 +18,7 @@ final class FoeTests: XCTestCase {
          .init(x: 101, y: 101),
          .init(x: 234, y: 645)]
             .map {
-                let foe = SKNode()
+                let foe = Character()
                 foe.position = $0
                 return foe
             }
@@ -114,5 +114,9 @@ final class FoeTests: XCTestCase {
         game.contact()
         
         waitForExpectations(timeout: 0.05)
+    }
+    
+    func testGravity() {
+        XCTFail()
     }
 }
