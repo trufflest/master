@@ -50,13 +50,4 @@ final class AreaTests: XCTestCase {
             }
         }
     }
-    
-    func testOrigin() {
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 0)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 1)
-        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 4, row: 2)
-        
-        game.load(ground: ground)
-        XCTAssertEqual(.init(x: 144, y: 96), game.items[.cornelius])
-    }
 }

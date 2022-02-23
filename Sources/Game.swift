@@ -39,7 +39,7 @@ public final class Game {
             y += 1
         }
         
-        items[.cornelius] = .init(x: (.init(x) * tile) + mid, y: .init(y) * tile)
+//        items[.cornelius] = .init(x: (.init(x) * tile) + mid, y: .init(y) * tile)
     }
     
     public func load(truffles: SKNode) {
@@ -57,6 +57,10 @@ public final class Game {
             .forEach {
                 items[.spike($0.0)] = $0.1.position
             }
+    }
+    
+    public func add(cornelius: SKNode) {
+        items[.cornelius] = cornelius.position
     }
     
     public func contact() {
