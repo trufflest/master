@@ -50,12 +50,16 @@ public final class Game {
             }
     }
     
-    public func add(cornelius: SKNode) {
-        items[.cornelius] = cornelius.position
+    public func load(lizards: SKNode) {
+        lizards
+            .children
+            .forEach {
+                items[.lizard($0)] = $0.position
+            }
     }
     
-    public func add(lizard: SKNode) {
-        items[.lizard(lizard)] = lizard.position
+    public func add(cornelius: SKNode) {
+        items[.cornelius] = cornelius.position
     }
     
     public func contact() {
