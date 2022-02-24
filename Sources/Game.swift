@@ -65,41 +65,14 @@ public final class Game {
     public func contact() {
         var cornelius = items[.cornelius]!
         cornelius.y += mid
-        
-        let items = items
-            .filter {
-                $0.key != .cornelius
-            }
-        
-    outer: for item in items {
-            if item.key.collides(at: item.value, with: .cornelius, position: cornelius) {
-                switch item.key {
-                case let .truffle(truffle):
-                    self.items.removeValue(forKey: item.key)
-                    self.truffle.send(truffle)
-                case .spike:
-                    self.state.send(.dead)
-                    self.face.send(.dead)
-                    break outer
-                case .foe:
-                    self.state.send(.dead)
-                    self.face.send(.dead)
-                    break outer
-                default:
-                    break
-                }
-            }
-        }
+        contact(point: cornelius, with: .cornelius)
     }
     
     public func foes() {
         items
             .forEach {
-                switch $0.key {
-                case let .foe(_, character):
+                if case let .foe(_, character) = $0.key {
                     foe(foe: $0.key, character: character, walking: randomer(current: character.direction))
-                default:
-                    break
                 }
             }
     }
@@ -208,6 +181,8 @@ public final class Game {
         
         x
             .map {
+                
+                
                 items[foe]!.x = $0
                 character.position.x = $0
             }
@@ -271,6 +246,29 @@ public final class Game {
             }
         }
         return result
+    }
+    
+    private func contact(point: CGPoint, with: Item) {
+    outer: for item in items {
+        guard item.key != with else { continue }
+            if item.key.collides(at: item.value, with: with, position: point) {
+                switch item.key {
+                case let .truffle(truffle):
+                    self.items.removeValue(forKey: item.key)
+                    self.truffle.send(truffle)
+                case .spike:
+                    self.state.send(.dead)
+                    self.face.send(.dead)
+                    break outer
+                case .foe:
+                    self.state.send(.dead)
+                    self.face.send(.dead)
+                    break outer
+                default:
+                    break
+                }
+            }
+        }
     }
     
     private func randomer(current: Walking) -> Walking {

@@ -125,4 +125,23 @@ final class AiTests: XCTestCase {
         
         XCTAssertEqual(188, foe.position.x)
     }
+    
+    func testWalkingFoeCollision() {
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 5, row: 4)
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
+        game.load(ground: ground)
+        game.items[.foe(.lizard, foe)] = .init(x: 32 * 5 + 16, y: 32 * 5)
+        foe.direction = .right
+        foe.face = .none
+        foe.position = .init(x: 32 * 5 + 16, y: 32 * 5)
+
+        let another = Character()
+        another.position = .init(x: 32 * 6 + 16, y: 32 * 5)
+        game.items[.foe(.lizard, another)] = another.position
+        
+        game.foe(foe: .foe(.lizard, foe), character: foe, walking: .right)
+        
+        XCTAssertEqual(32 * 5 + 16, foe.position.x)
+        XCTAssertEqual(.walk1(0), foe.face)
+    }
 }
