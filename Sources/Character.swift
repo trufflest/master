@@ -1,7 +1,7 @@
 import SpriteKit
 
-public class Character: SKSpriteNode {
-    public var direction = Walking.none {
+open class Character: SKSpriteNode {
+    open var direction = Walking.none {
         didSet {
             switch direction {
             case .left:
@@ -12,13 +12,13 @@ public class Character: SKSpriteNode {
         }
     }
     
-    public var face = Face.none {
+    open var face = Face.none {
         didSet {
             texture = textures[face.key]
         }
     }
     
-    public var textures: [String : SKTexture] {
+    open var textures: [String : SKTexture] {
         [:]
     }
 }
