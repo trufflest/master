@@ -65,7 +65,20 @@ public final class Game {
     public func contact() {
         var cornelius = items[.cornelius]!
         cornelius.y += mid
-        contact(point: cornelius, with: .cornelius)
+        let (truffles, contact) = contact(point: cornelius, with: .cornelius)
+        
+        truffles
+            .forEach {
+                if case let .truffle(node) = $0 {
+                    items.removeValue(forKey: $0)
+                    truffle.send(node)
+                }
+            }
+
+        if contact {
+            state.send(.dead)
+            face.send(.dead)
+        }
     }
     
     public func foes() {
@@ -181,10 +194,10 @@ public final class Game {
         
         x
             .map {
-                
-                
-                items[foe]!.x = $0
-                character.position.x = $0
+                if !contact(point: .init(x: $0, y: items[foe]!.y + mid), with: foe).contact {
+                    items[foe]!.x = $0
+                    character.position.x = $0
+                }
             }
     }
     
@@ -248,27 +261,25 @@ public final class Game {
         return result
     }
     
-    private func contact(point: CGPoint, with: Item) {
-    outer: for item in items {
-        guard item.key != with else { continue }
+    private func contact(point: CGPoint, with: Item) -> (truffles: [Item], contact: Bool) {
+        var result: (truffles: [Item], contact: Bool) = ([], false)
+        
+        for item in items {
+            guard item.key != with else { continue }
             if item.key.collides(at: item.value, with: with, position: point) {
                 switch item.key {
-                case let .truffle(truffle):
-                    self.items.removeValue(forKey: item.key)
-                    self.truffle.send(truffle)
-                case .spike:
-                    self.state.send(.dead)
-                    self.face.send(.dead)
-                    break outer
-                case .foe:
-                    self.state.send(.dead)
-                    self.face.send(.dead)
-                    break outer
+                case .truffle:
+                    result.truffles.append(item.key)
+                case .spike, .foe:
+                    result.contact = true
+                    return result
                 default:
                     break
                 }
             }
         }
+        
+        return result
     }
     
     private func randomer(current: Walking) -> Walking {
