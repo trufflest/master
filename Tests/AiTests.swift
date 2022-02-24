@@ -46,6 +46,19 @@ final class AiTests: XCTestCase {
         XCTAssertEqual(188, foe.position.x)
     }
     
+    func testNoWalking() {
+        ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
+        game.load(ground: ground)
+        game.items[.foe(.lizard, foe)] = .init(x: 32 * 6, y: 32 * 5)
+        foe.direction = .left
+        foe.face = .walk1(0)
+        
+        game.foe(foe: .foe(.lizard, foe), character: foe, walking: .none)
+        
+        XCTAssertEqual(.none, foe.face)
+        XCTAssertEqual(32 * 6, game.items[.foe(.lizard, foe)]!.x)
+    }
+    
     func testWalkingFace() {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 6, row: 4)
         game.load(ground: ground)
