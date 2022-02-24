@@ -6,8 +6,10 @@ open class Character: SKSpriteNode {
             switch direction {
             case .left:
                 xScale = -1
-            default:
+            case .right:
                 xScale = 1
+            default:
+                break
             }
         }
     }
