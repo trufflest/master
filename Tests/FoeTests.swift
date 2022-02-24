@@ -115,26 +115,4 @@ final class FoeTests: XCTestCase {
         
         waitForExpectations(timeout: 0.05)
     }
-    
-    func testSpike() {
-        let foe = Character()
-        let group = SKTileGroup(tileDefinition: .init())
-        let ground = SKTileMapNode(tileSet: .init(tileGroups: [group], tileSetType: .grid),
-                                   columns: 200,
-                                   rows: 100,
-                                   tileSize: .init(width: 32, height: 32))
-        
-        game.load(ground: ground)
-        game.items[.foe(.lizard, foe)] = .init(x: 50 + (15 - 1) + 7,
-                                               y: 50 - 16 + (15 - 1) + 9)
-        game.items[.spike(0)] = .init(x: 50, y: 50)
-
-        XCTAssertNotNil(game.items[.foe(.lizard, foe)])
-        game.foes()
-        XCTAssertNil(game.items[.foe(.lizard, foe)])
-    }
-    
-    func testGravity() {
-        XCTFail()
-    }
 }

@@ -84,15 +84,34 @@ public final class Game {
     public func foes() {
         let items = items
         items
-            .forEach {
-                if case let .foe(_, character) = $0.key {
-                    let (_, _, spike) = contact(point: $0.value, with: $0.key)
+            .forEach { item in
+                if case let .foe(_, character) = item.key {
+                    let (_, _, spike) = contact(point: item.value, with: item.key)
                     
                     if spike {
-                        self.items.removeValue(forKey: $0.key)
+                        self.items.removeValue(forKey: item.key)
                         character.run(.sequence([.fadeOut(withDuration: 1), .removeFromParent()]))
                     } else {
-                        foe(foe: $0.key, character: character, walking: randomer(current: character.direction))
+                        let walking = randomer(current: character.direction)
+                        let (face, _, y, fell) = gravity(point: item.value, jumping: .ready, walking: walking, face: character.face)
+                        
+                        face
+                            .map {
+                                character.face = $0
+                            }
+                        
+                        y
+                            .map {
+                                self.items[item.key]!.y = $0
+                                character.position.y = $0
+                            }
+                        
+                        if fell {
+                            self.items.removeValue(forKey: item.key)
+                            character.run(.sequence([.fadeOut(withDuration: 1), .removeFromParent()]))
+                        } else {
+                            foe(foe: item.key, character: character, walking: walking)
+                        }
                     }
                 }
             }
@@ -100,26 +119,26 @@ public final class Game {
     
     public func gravity(jumping: Jumping, walking: Walking, face: Face) {
         if jumping == .over || jumping == .ready {
-            let point = items[.cornelius]!
+            let (face, jumping, y, fell) = gravity(point: items[.cornelius]!, jumping: jumping, walking: walking, face: face)
             
-            if ground(on: point) {
-                if walking == .none, face != .none {
-                    self.face.send(.none)
+            face
+                .map {
+                    self.face.send($0)
                 }
-                
-                if jumping == .over {
-                    self.jumping.send(.ready)
+            
+            jumping
+                .map {
+                    self.jumping.send($0)
                 }
-            } else {
-                if point.y <= moving {
-                    state.send(.fell)
-                } else {
-                    move(y: point.y - (moving * 2))
-                    
-                    if jumping == .ready {
-                        self.jumping.send(.over)
-                    }
+            
+            y
+                .map {
+                    items[.cornelius]!.y = $0
+                    moveY.send($0)
                 }
+            
+            if fell {
+                state.send(.fell)
             }
         }
     }
@@ -142,10 +161,12 @@ public final class Game {
             } else {
                 if case let .counter(counter) = jumping {
                     if counter <= 10 {
-                        move(y: above.y)
+                        items[.cornelius]!.y = above.y
+                        moveY.send(above.y)
                     }
                 } else {
-                    move(y: above.y)
+                    items[.cornelius]!.y = above.y
+                    moveY.send(above.y)
                 }
                 
                 switch jumping {
@@ -294,6 +315,36 @@ public final class Game {
         return result
     }
     
+    private func gravity(point: CGPoint,
+                         jumping: Jumping,
+                         walking: Walking,
+                         face: Face) -> (face: Face?, jumping: Jumping?, y: CGFloat?, fell: Bool) {
+
+        var result: (face: Face?, jumping: Jumping?, y: CGFloat?, fell: Bool) = (nil, nil, nil, false)
+        
+        if ground(on: point) {
+            if walking == .none, face != .none {
+                result.face = Face.none
+            }
+            
+            if jumping == .over {
+                result.jumping = .ready
+            }
+        } else {
+            if point.y <= moving {
+                result.fell = true
+            } else {
+                result.y = point.y - (moving * 2)
+                
+                if jumping == .ready {
+                    result.jumping = .over
+                }
+            }
+        }
+        
+        return result
+    }
+    
     private func randomer(current: Walking) -> Walking {
         switch Int.random(in: 0 ..< 10) {
         case 0 ..< 6:
@@ -317,11 +368,6 @@ public final class Game {
                 return .left
             }
         }
-    }
-    
-    private func move(y: CGFloat) {
-        items[.cornelius]!.y = y
-        moveY.send(items[.cornelius]!.y)
     }
     
     private func ground(on point: CGPoint) -> Bool {
