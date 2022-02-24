@@ -54,6 +54,7 @@ public final class Game {
         lizards
             .children
             .forEach {
+                ($0 as! Character).direction = .allCases.randomElement()!
                 items[.foe(.lizard, $0 as! Character)] = $0.position
             }
     }

@@ -1,4 +1,4 @@
-public enum Walking {
+public enum Walking: CaseIterable {
     case
     none,
     left,
