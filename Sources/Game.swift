@@ -346,10 +346,10 @@ public final class Game {
     }
     
     private func randomer(current: Walking) -> Walking {
-        switch Int.random(in: 0 ..< 10) {
-        case 0 ..< 6:
+        switch Int.random(in: 0 ..< 100) {
+        case 0 ..< 96:
             return current
-        case 6 ..< 8:
+        case 96 ..< 98:
             switch current {
             case .none:
                 return .left
