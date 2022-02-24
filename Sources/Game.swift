@@ -93,7 +93,7 @@ public final class Game {
                         character.run(.sequence([.fadeOut(withDuration: 1), .removeFromParent()]))
                     } else {
                         let walking = randomer(current: character.direction)
-
+                        print(walking)
                         let (face, _, y, fell) = gravity(point: item.value, jumping: .ready, walking: walking, face: character.face)
                         
                         face
@@ -347,10 +347,10 @@ public final class Game {
     }
     
     private func randomer(current: Walking) -> Walking {
-        switch Int.random(in: 0 ..< 400) {
-        case 0 ..< 398:
+        switch Int.random(in: 0 ..< 300) {
+        case 0 ..< 298:
             return current
-        case 398:
+        case 298:
             switch current {
             case .none:
                 return .left
