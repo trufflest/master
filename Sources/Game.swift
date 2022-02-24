@@ -65,7 +65,7 @@ public final class Game {
     public func contact() {
         var cornelius = items[.cornelius]!
         cornelius.y += mid
-        let (truffles, contact) = contact(point: cornelius, with: .cornelius)
+        let (truffles, foe, spike) = contact(point: cornelius, with: .cornelius)
         
         truffles
             .forEach {
@@ -75,17 +75,25 @@ public final class Game {
                 }
             }
 
-        if contact {
+        if foe || spike {
             state.send(.dead)
             face.send(.dead)
         }
     }
     
     public func foes() {
+        let items = items
         items
             .forEach {
                 if case let .foe(_, character) = $0.key {
-                    foe(foe: $0.key, character: character, walking: randomer(current: character.direction))
+                    let (_, _, spike) = contact(point: $0.value, with: $0.key)
+                    
+                    if spike {
+                        self.items.removeValue(forKey: $0.key)
+                        character.run(.sequence([.fadeOut(withDuration: 1), .removeFromParent()]))
+                    } else {
+                        foe(foe: $0.key, character: character, walking: randomer(current: character.direction))
+                    }
                 }
             }
     }
@@ -194,7 +202,9 @@ public final class Game {
         
         x
             .map {
-                if !contact(point: .init(x: $0, y: items[foe]!.y + mid), with: foe).contact {
+                let (_, collide, _) = contact(point: .init(x: $0, y: items[foe]!.y + mid), with: foe)
+                
+                if !collide {
                     items[foe]!.x = $0
                     character.position.x = $0
                 }
@@ -261,23 +271,25 @@ public final class Game {
         return result
     }
     
-    private func contact(point: CGPoint, with: Item) -> (truffles: [Item], contact: Bool) {
-        var result: (truffles: [Item], contact: Bool) = ([], false)
+    private func contact(point: CGPoint, with: Item) -> (truffles: [Item], foe: Bool, spike: Bool) {
+        var result: (truffles: [Item], foe: Bool, spike: Bool) = ([], false, false)
         
-        for item in items {
-            guard item.key != with else { continue }
-            if item.key.collides(at: item.value, with: with, position: point) {
-                switch item.key {
-                case .truffle:
-                    result.truffles.append(item.key)
-                case .spike, .foe:
-                    result.contact = true
-                    return result
-                default:
-                    break
+        items
+            .forEach {
+                guard $0.key != with else { return }
+                if $0.key.collides(at: $0.value, with: with, position: point) {
+                    switch $0.key {
+                    case .truffle:
+                        result.truffles.append($0.key)
+                    case .spike:
+                        result.spike = true
+                    case .foe:
+                        result.foe = true
+                    default:
+                        break
+                    }
                 }
             }
-        }
         
         return result
     }
