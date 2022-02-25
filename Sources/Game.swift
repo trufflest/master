@@ -186,7 +186,7 @@ public final class Game {
     }
     
     public func walk(walking: Walking, face: Face, direction: Walking) {
-        let (face, direction, x) = walk(point: items[.cornelius]!, walking: walking, face: face, direction: direction)
+        let (face, direction, x, _) = walk(point: items[.cornelius]!, walking: walking, face: face, direction: direction)
         
         face
             .map {
@@ -206,7 +206,7 @@ public final class Game {
     }
     
     func foe(foe: Item, character: Character, walking: Walking) {
-        let (face, direction, x) = walk(point: items[foe]!,
+        let (face, direction, x, blocked) = walk(point: items[foe]!,
                                         walking: walking,
                                         face: character.face,
                                         direction: character.direction)
@@ -216,10 +216,11 @@ public final class Game {
                 character.face = $0
             }
         
-        direction
-            .map {
-                character.direction = $0
-            }
+        if let direction = direction {
+            character.direction = direction
+        } else if blocked {
+            character.direction = .none
+        }
         
         x
             .map {
@@ -234,8 +235,15 @@ public final class Game {
             }
     }
     
-    private func walk(point: CGPoint, walking: Walking, face: Face, direction: Walking) -> (face: Face?, direction: Walking?, x: CGFloat?) {
-        var result: (face: Face?, direction: Walking?, x: CGFloat?) = (nil, nil, nil)
+    private func walk(point: CGPoint,
+                      walking: Walking,
+                      face: Face,
+                      direction: Walking) -> (face: Face?,
+                                              direction: Walking?,
+                                              x: CGFloat?,
+                                              blocked: Bool) {
+        
+        var result: (face: Face?, direction: Walking?, x: CGFloat?, blocked: Bool) = (nil, nil, nil, false)
         
         if walking == direction {
             let grounded = ground(on: point)
@@ -281,7 +289,7 @@ public final class Game {
                !area(on: .init(x: nextPoint.x, y: nextPoint.y + Self.mid)) {
                 result.x = delta
             } else {
-                result.direction = Walking.none
+                result.blocked = true
             }
         } else {
             result.direction = walking
