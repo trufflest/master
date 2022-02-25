@@ -45,8 +45,8 @@ final class FoeTests: XCTestCase {
         let expectState = expectation(description: "")
         let expectFace = expectation(description: "")
         
-        game.items[.cornelius] = .init(x: 234 - (15 - 1) - 15,
-                                       y: 645 - (15 - 1) - 15)
+        game.items[.cornelius] = .init(x: 234 - (14 - 1) - 14,
+                                       y: 645 - (14 - 1) - 14)
         
         game
             .state
@@ -74,7 +74,7 @@ final class FoeTests: XCTestCase {
         expect.isInverted = true
         
         game.items[.cornelius] = .init(x: 234,
-                                       y: 645 - 15 - 15)
+                                       y: 645 - 14 - 14)
         
         game
             .state

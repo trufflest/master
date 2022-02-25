@@ -17,7 +17,7 @@ public enum Item: Hashable {
     private var horizontal: CGFloat {
         switch self {
         case .cornelius:
-            return 15
+            return 14
         case .truffle:
             return 10
         case .spike:
@@ -30,7 +30,7 @@ public enum Item: Hashable {
     private var vertical: CGFloat {
         switch self {
         case .cornelius:
-            return 15
+            return 14
         case .truffle:
             return 10
         case .spike:

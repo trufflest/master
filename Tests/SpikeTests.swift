@@ -39,8 +39,8 @@ final class SpikeTests: XCTestCase {
         let expectState = expectation(description: "")
         let expectFace = expectation(description: "")
         
-        game.items[.cornelius] = .init(x: 234 - (15 - 1) - 7,
-                                       y: 645 - 16 - (15 - 1) - 9)
+        game.items[.cornelius] = .init(x: 234 - (14 - 1) - 7,
+                                       y: 645 - 16 - (14 - 1) - 9)
         
         game
             .state
@@ -68,7 +68,7 @@ final class SpikeTests: XCTestCase {
         expect.isInverted = true
         
         game.items[.cornelius] = .init(x: 234,
-                                       y: 645 - 16 - 15 - 9)
+                                       y: 645 - 16 - 14 - 9)
         
         game
             .state
