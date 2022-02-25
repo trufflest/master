@@ -13,6 +13,14 @@ final class FoeTests: XCTestCase {
         subs = .init()
         foes = .init()
         
+        let group = SKTileGroup(tileDefinition: .init())
+        let ground = SKTileMapNode(tileSet: .init(tileGroups: [group], tileSetType: .grid),
+                                  columns: 200,
+                                  rows: 100,
+                                  tileSize: .init(width: 32, height: 32))
+        
+        game.load(ground: ground)
+        
         [CGPoint(x: 300, y: 300),
          .init(x: 100, y: 100),
          .init(x: 101, y: 101),

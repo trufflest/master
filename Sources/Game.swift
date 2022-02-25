@@ -77,6 +77,10 @@ public final class Game {
             state.send(.dead)
             face.send(.dead)
         }
+        
+        if goal(on: items[.cornelius]!.x) {
+            state.send(.finished)
+        }
     }
     
     public func foes() {
@@ -396,5 +400,9 @@ public final class Game {
     
     private func area(on point: CGPoint) -> Bool {
         area[.init(point.x / Self.tile)][.init(point.y / Self.tile)]
+    }
+    
+    private func goal(on x: CGFloat) -> Bool {
+        .init(x / Self.tile) >= area.count - 3
     }
 }

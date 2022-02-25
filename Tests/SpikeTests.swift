@@ -11,6 +11,12 @@ final class SpikeTests: XCTestCase {
     override func setUp() {
         spikes = .init()
         
+        let group = SKTileGroup(tileDefinition: .init())
+        let ground = SKTileMapNode(tileSet: .init(tileGroups: [group], tileSetType: .grid),
+                                  columns: 200,
+                                  rows: 100,
+                                  tileSize: .init(width: 32, height: 32))
+        
         [CGPoint(x: 300, y: 300),
          .init(x: 100, y: 100),
          .init(x: 101, y: 101),
@@ -26,6 +32,7 @@ final class SpikeTests: XCTestCase {
         
         game = .init()
         game.load(spikes: spikes)
+        game.load(ground: ground)
     }
     
     func testLoad() {

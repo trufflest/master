@@ -3,5 +3,6 @@ public enum State {
     playing,
     pause,
     fell,
-    dead
+    dead,
+    finished
 }
