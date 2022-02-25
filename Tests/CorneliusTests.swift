@@ -32,7 +32,7 @@ final class CorneliusTests: XCTestCase {
         ground.setTileGroup(group, andTileDefinition: .init(), forColumn: 199, row: 4)
         
         game.load(ground: ground)
-        game.items[.cornelius] = .init(x: 32 * 197, y: 32 * 5)
+        game.items[.cornelius] = .init(x: 32 * 196, y: 32 * 5)
         
         game
             .state

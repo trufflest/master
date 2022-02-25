@@ -403,6 +403,6 @@ public final class Game {
     }
     
     private func goal(on x: CGFloat) -> Bool {
-        .init(x / Self.tile) >= area.count - 3
+        .init(x / Self.tile) >= area.count - 4
     }
 }
