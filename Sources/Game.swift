@@ -4,6 +4,9 @@ import Combine
 private let moving = 4.0
 
 public final class Game {
+    static let tile = CGFloat(32)
+    static let mid = CGFloat(16)
+    
     public let moveX = PassthroughSubject<CGFloat, Never>()
     public let moveY = PassthroughSubject<CGFloat, Never>()
     public let face = PassthroughSubject<Face, Never>()
@@ -13,8 +16,6 @@ public final class Game {
     public let truffle = PassthroughSubject<SKNode, Never>()
     public internal(set) var items = [Item : CGPoint]()
     private(set) var area = [[Bool]]()
-    private(set) var tile = CGFloat()
-    private var mid = CGFloat()
     private var size = CGSize()
     
     public init() {
@@ -22,8 +23,6 @@ public final class Game {
     }
     
     public func load(ground: SKTileMapNode) {
-        tile = ground.tileSize.width
-        mid = tile / 2
         size = ground.mapSize
         
         area = (0 ..< ground.numberOfColumns).map { x in
@@ -64,9 +63,7 @@ public final class Game {
     }
     
     public func contact() {
-        var cornelius = items[.cornelius]!
-        cornelius.y += mid
-        let (truffles, foe, spike) = contact(point: cornelius, with: .cornelius)
+        let (truffles, foe, spike) = contact(point: items[.cornelius]!, with: .cornelius)
         
         truffles
             .forEach {
@@ -157,7 +154,7 @@ public final class Game {
             || (jumping != .ready && jumping != .over) {
             
             let above = CGPoint(x: point.x, y: point.y + (moving * 2))
-            if ceiling(on: above) || above.y > size.height - mid {
+            if ceiling(on: above) || above.y > size.height - Self.mid {
                 if jumping != .ready {
                     self.jumping.send(.over)
                 }
@@ -226,7 +223,7 @@ public final class Game {
         
         x
             .map {
-                let (_, collides, _) = contact(point: .init(x: $0, y: items[foe]!.y + mid), with: foe)
+                let (_, collides, _) = contact(point: .init(x: $0, y: items[foe]!.y), with: foe)
                 
                 if collides {
                     character.direction = .none
@@ -265,8 +262,8 @@ public final class Game {
             var distance = moving
             
             if !grounded,
-               point.y > tile + moving,
-               !ground(on: .init(x: point.x, y: point.y - tile)) {
+               point.y > Self.tile + moving,
+               !ground(on: .init(x: point.x, y: point.y - Self.tile)) {
                 distance *= 1.5
             }
             
@@ -281,7 +278,7 @@ public final class Game {
             if nextPoint.x > moving,
                nextPoint.x < size.width - moving,
                !area(on: nextPoint),
-               !area(on: .init(x: nextPoint.x, y: nextPoint.y + mid)) {
+               !area(on: .init(x: nextPoint.x, y: nextPoint.y + Self.mid)) {
                 result.x = delta
             } else {
                 result.direction = Walking.none
@@ -379,17 +376,17 @@ public final class Game {
     
     private func ground(on point: CGPoint) -> Bool {
         point.y > moving
-        && point.y.truncatingRemainder(dividingBy: tile) == 0
+        && point.y.truncatingRemainder(dividingBy: Self.tile) == 0
         && area(on: .init(x: point.x, y: point.y - 1))
     }
     
     private func ceiling(on point: CGPoint) -> Bool {
-        point.y >= size.height - (moving + mid)
-        || (point.y < size.height - (moving + mid)
-            && area(on: .init(x: point.x, y: point.y + (moving + mid))))
+        point.y >= size.height - (moving + Self.mid)
+        || (point.y < size.height - (moving + Self.mid)
+            && area(on: .init(x: point.x, y: point.y + (moving + Self.mid))))
     }
     
     private func area(on point: CGPoint) -> Bool {
-        area[.init(point.x / tile)][.init(point.y / tile)]
+        area[.init(point.x / Self.tile)][.init(point.y / Self.tile)]
     }
 }

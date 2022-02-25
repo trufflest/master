@@ -8,8 +8,10 @@ public enum Item: Hashable {
     truffle(SKNode)
     
     func collides(at: CGPoint, with: Item, position: CGPoint) -> Bool {
-        abs(at.x - position.x) < horizontal + with.horizontal
-        && abs(at.y - position.y) < vertical + with.vertical
+        { this, other in
+            abs(this.x - other.x) < horizontal + with.horizontal
+            && abs(this.y - other.y) < vertical + with.vertical
+        } (origin(from: at), with.origin(from: position))
     }
     
     private var horizontal: CGFloat {
@@ -35,6 +37,15 @@ public enum Item: Hashable {
             return 9
         case let .foe(foe, _):
             return foe.vertical
+        }
+    }
+    
+    private func origin(from: CGPoint) -> CGPoint {
+        switch self {
+        case .cornelius, .foe:
+            return .init(x: from.x, y: from.y + Game.mid)
+        default:
+            return from
         }
     }
 }

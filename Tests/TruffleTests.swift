@@ -35,7 +35,7 @@ final class TruffleTests: XCTestCase {
         })
     }
     
-    func testPickup() {
+    func testPickupBelow() {
         let expect = expectation(description: "")
         
         let truffle = game.items.first {
@@ -50,8 +50,8 @@ final class TruffleTests: XCTestCase {
         
         XCTAssertNotNil(node.parent)
         
-        game.items[.cornelius] = .init(x: 234 + (15 - 1) + 10,
-                                       y: 645 - 16 + (15 - 1) + 10)
+        game.items[.cornelius] = .init(x: 234 - (15 - 1) - 10,
+                                       y: 645 - 16 - (15 - 1) - 10)
         XCTAssertEqual(5, game.items.count)
         
         game
@@ -68,12 +68,31 @@ final class TruffleTests: XCTestCase {
         waitForExpectations(timeout: 0.05)
     }
     
-    func testNoContact() {
+    func testNoContactBelow() {
         let expect = expectation(description: "")
         expect.isInverted = true
         
-        game.items[.cornelius] = .init(x: 234 + 15 + 10,
-                                       y: 645 - 16 + 15 + 10)
+        game.items[.cornelius] = .init(x: 234,
+                                       y: 645 - 16 - 15 - 10)
+        
+        game
+            .truffle
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        game.contact()
+        
+        waitForExpectations(timeout: 0.05)
+    }
+    
+    func testNoContactAbove() {
+        let expect = expectation(description: "")
+        expect.isInverted = true
+        
+        game.items[.cornelius] = .init(x: 234,
+                                       y: 645 + (15 - 1) + 10)
         
         game
             .truffle
