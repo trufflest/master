@@ -96,7 +96,6 @@ final class AiTests: XCTestCase {
         
         XCTAssertEqual(.walk1(0), foe.face)
         XCTAssertEqual(106, foe.position.x)
-        
     }
     
     func testWalkingRightEdge() {
@@ -124,6 +123,7 @@ final class AiTests: XCTestCase {
         game.foe(foe: .foe(.lizard, foe), character: foe, walking: .left)
         
         XCTAssertEqual(32 * 6, foe.position.x)
+        XCTAssertEqual(.none, foe.direction)
     }
     
     func testWalkingCloseToFloor() {
@@ -156,5 +156,6 @@ final class AiTests: XCTestCase {
         
         XCTAssertEqual(32 * 5 + 16, foe.position.x)
         XCTAssertEqual(.walk1(0), foe.face)
+        XCTAssertEqual(.none, foe.direction)
     }
 }

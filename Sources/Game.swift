@@ -226,9 +226,11 @@ public final class Game {
         
         x
             .map {
-                let (_, collide, _) = contact(point: .init(x: $0, y: items[foe]!.y + mid), with: foe)
+                let (_, collides, _) = contact(point: .init(x: $0, y: items[foe]!.y + mid), with: foe)
                 
-                if !collide {
+                if collides {
+                    character.direction = .none
+                } else {
                     items[foe]!.x = $0
                     character.position.x = $0
                 }
@@ -281,6 +283,8 @@ public final class Game {
                !area(on: nextPoint),
                !area(on: .init(x: nextPoint.x, y: nextPoint.y + mid)) {
                 result.x = delta
+            } else {
+                result.direction = Walking.none
             }
         } else {
             result.direction = walking
