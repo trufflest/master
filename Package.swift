@@ -12,9 +12,13 @@ let package = Package(
             name: "Master",
             targets: ["Master"]),
     ],
+    dependencies: [
+        .package(name: "Archivable", url: "https://github.com/archivable/package.git", .branch("main"))
+    ],
     targets: [
         .target(
             name: "Master",
+            dependencies: ["Archivable"],
             path: "Sources"),
         .testTarget(
             name: "Tests",
