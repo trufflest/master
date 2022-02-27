@@ -3,9 +3,9 @@ import Archivable
 
 public struct Archive: Arch {
     public var timestamp: UInt32
-    public private(set) var level: UInt8
-    public private(set) var truffles: UInt16
-    public private(set) var settings: Settings
+    public internal(set) var level: UInt8
+    public internal(set) var truffles: UInt16
+    public internal(set) var settings: Settings
     
     public var data: Data {
         .init()
