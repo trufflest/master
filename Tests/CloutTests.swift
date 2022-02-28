@@ -22,12 +22,12 @@ final class CloudTests: XCTestCase {
         await cloud.levelup()
         
         model = await cloud.model
-        XCTAssertEqual(1, model.level)
+        XCTAssertEqual(2, model.level)
         
         await cloud.levelup()
         
         model = await cloud.model
-        XCTAssertEqual(2, model.level)
+        XCTAssertEqual(3, model.level)
     }
     
     func testTruffles() async {
@@ -45,7 +45,7 @@ final class CloudTests: XCTestCase {
         await cloud.restart()
         
         model = await cloud.model
-        XCTAssertEqual(0, model.level)
+        XCTAssertEqual(1, model.level)
         XCTAssertEqual(0, model.truffles)
         XCTAssertFalse(model.settings.sounds)
     }

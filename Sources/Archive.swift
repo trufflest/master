@@ -16,8 +16,8 @@ public struct Archive: Arch {
     
     public init() {
         timestamp = 0
-        level = 0
         truffles = 0
+        level = 1
         settings = .init()
     }
     

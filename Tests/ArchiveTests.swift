@@ -9,8 +9,11 @@ final class ArchiveTests: XCTestCase {
         archive = .init()
     }
     
+    func testLevel() {
+        XCTAssertEqual(1, archive.level)
+    }
+    
     func testParse() async {
-        archive = await Archive.prototype(data: archive.compressed)
         archive.level = 200
         archive.truffles = 32324
         archive.settings = archive.settings.with(sounds: false)

@@ -14,7 +14,7 @@ extension Cloud where Output == Archive {
     }
     
     public func restart() async {
-        model.level = 0
+        model.level = 1
         model.truffles = 0
         await stream()
     }
