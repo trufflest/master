@@ -3,7 +3,8 @@ import Foundation
 public enum Defaults: String {
     case
     rated,
-    created
+    created,
+    purchases
 
     public static var rate: Bool {
         if let created = wasCreated {
@@ -23,9 +24,22 @@ public enum Defaults: String {
         set { self[.rated] = newValue }
     }
     
+    public static func has(level: Int) -> Bool {
+        perks.contains(level)
+    }
+    
+    public static func purchase(level: Int) {
+        perks.append(level)
+    }
+    
     static var wasCreated: Date? {
         get { self[.created] as? Date }
         set { self[.created] = newValue }
+    }
+    
+    private static var perks: [Int] {
+        get { self[.purchases] as? [Int] ?? [] }
+        set { self[.purchases] = newValue }
     }
     
     private static subscript(_ key: Self) -> Any? {

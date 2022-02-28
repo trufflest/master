@@ -5,6 +5,7 @@ final class DefaultsTests: XCTestCase {
     override func setUp() {
         UserDefaults.standard.removeObject(forKey: Defaults.rated.rawValue)
         UserDefaults.standard.removeObject(forKey: Defaults.created.rawValue)
+        UserDefaults.standard.removeObject(forKey: Defaults.purchases.rawValue)
     }
     
     override func tearDown() {
@@ -26,5 +27,12 @@ final class DefaultsTests: XCTestCase {
         XCTAssertTrue(Defaults.rate)
         XCTAssertTrue(Defaults.hasRated)
         XCTAssertFalse(Defaults.rate)
+    }
+    
+    func testPurchases() {
+        XCTAssertFalse(Defaults.has(level: 5))
+        Defaults.purchase(level: 5)
+        XCTAssertTrue(Defaults.has(level: 5))
+        XCTAssertFalse(Defaults.has(level: 4))
     }
 }
