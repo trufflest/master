@@ -29,7 +29,14 @@ public enum Defaults: String {
     }
     
     public static func purchase(level: Int) {
+        guard !has(level: level) else { return }
         perks.append(level)
+    }
+    
+    public static func remove(level: Int) {
+        perks.remove {
+            $0 == level
+        }
     }
     
     static var wasCreated: Date? {
@@ -37,7 +44,7 @@ public enum Defaults: String {
         set { self[.created] = newValue }
     }
     
-    private static var perks: [Int] {
+    static var perks: [Int] {
         get { self[.purchases] as? [Int] ?? [] }
         set { self[.purchases] = newValue }
     }

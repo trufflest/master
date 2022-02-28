@@ -32,7 +32,12 @@ final class DefaultsTests: XCTestCase {
     func testPurchases() {
         XCTAssertFalse(Defaults.has(level: 5))
         Defaults.purchase(level: 5)
+        Defaults.purchase(level: 5)
+        XCTAssertEqual(1, Defaults.perks.count)
         XCTAssertTrue(Defaults.has(level: 5))
         XCTAssertFalse(Defaults.has(level: 4))
+        Defaults.remove(level: 5)
+        XCTAssertFalse(Defaults.has(level: 5))
+        XCTAssertTrue(Defaults.perks.isEmpty)
     }
 }
