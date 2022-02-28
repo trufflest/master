@@ -24,11 +24,11 @@ public enum Defaults: String {
         set { self[.rated] = newValue }
     }
     
-    public static func has(level: Int) -> Bool {
+    public static func has(level: UInt8) -> Bool {
         perks.contains(level)
     }
     
-    public static func purchase(level: Int) {
+    public static func purchase(level: UInt8) {
         guard !has(level: level) else { return }
         perks.append(level)
     }
@@ -44,8 +44,8 @@ public enum Defaults: String {
         set { self[.created] = newValue }
     }
     
-    static var perks: [Int] {
-        get { self[.purchases] as? [Int] ?? [] }
+    static var perks: [UInt8] {
+        get { self[.purchases] as? [UInt8] ?? [] }
         set { self[.purchases] = newValue }
     }
     
