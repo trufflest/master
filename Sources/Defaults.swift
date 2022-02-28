@@ -33,7 +33,7 @@ public enum Defaults: String {
         perks.append(level)
     }
     
-    public static func remove(level: Int) {
+    public static func remove(level: UInt8) {
         perks.remove {
             $0 == level
         }
