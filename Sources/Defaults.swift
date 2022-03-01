@@ -25,7 +25,12 @@ public enum Defaults: String {
     }
     
     public static func has(level: UInt8) -> Bool {
-        perks.contains(level)
+        switch level {
+        case 0, 1:
+            return true
+        default:
+            return perks.contains(level)
+        }
     }
     
     public static func purchase(level: UInt8) {

@@ -40,4 +40,9 @@ final class DefaultsTests: XCTestCase {
         XCTAssertFalse(Defaults.has(level: 5))
         XCTAssertTrue(Defaults.perks.isEmpty)
     }
+    
+    func testHasLevel() {
+        XCTAssertTrue(Defaults.has(level: 0))
+        XCTAssertTrue(Defaults.has(level: 1))
+    }
 }
