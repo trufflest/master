@@ -7,14 +7,14 @@ public enum Foe {
     var horizontal: CGFloat {
         switch self {
         case .lizard:
-            return 14
+            return 12
         }
     }
     
     var vertical: CGFloat {
         switch self {
         case .lizard:
-            return 14
+            return 12
         }
     }
 }
