@@ -50,8 +50,8 @@ final class TruffleTests: XCTestCase {
         
         XCTAssertNotNil(node.parent)
         
-        game.items[.cornelius] = .init(x: 234 - (14 - 1) - 8,
-                                       y: 645 - 16 - (14 - 1) - 8)
+        game.items[.cornelius] = .init(x: 234 - (13 - 1) - 8,
+                                       y: 645 - 16 - (13 - 1) - 8)
         XCTAssertEqual(5, game.items.count)
         
         game

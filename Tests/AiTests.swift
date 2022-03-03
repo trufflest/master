@@ -149,7 +149,7 @@ final class AiTests: XCTestCase {
         foe.position = .init(x: 32 * 5, y: 32 * 5)
 
         let another = Character()
-        another.position = .init(x: 32 * 5 + 28, y: 32 * 5)
+        another.position = .init(x: 32 * 5 + 24, y: 32 * 5)
         game.items[.foe(.lizard, another)] = another.position
         
         game.foe(foe: .foe(.lizard, foe), character: foe, walking: .right)

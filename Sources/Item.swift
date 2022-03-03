@@ -17,11 +17,11 @@ public enum Item: Hashable {
     private var horizontal: CGFloat {
         switch self {
         case .cornelius:
-            return 14
+            return 13
         case .truffle:
             return 8
         case .spike:
-            return 7
+            return 6
         case let .foe(foe, _):
             return foe.horizontal
         }
@@ -30,11 +30,11 @@ public enum Item: Hashable {
     private var vertical: CGFloat {
         switch self {
         case .cornelius:
-            return 14
+            return 13
         case .truffle:
             return 8
         case .spike:
-            return 9
+            return 8
         case let .foe(foe, _):
             return foe.vertical
         }

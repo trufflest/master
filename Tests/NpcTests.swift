@@ -23,8 +23,8 @@ final class NpcTests: XCTestCase {
     
     func testSpike() {
         game.load(ground: ground)
-        game.items[.foe(.lizard, npc)] = .init(x: 50 + (14 - 1) + 7,
-                                               y: 50 - 16 + (14 - 1) + 9)
+        game.items[.foe(.lizard, npc)] = .init(x: 50 + (12 - 1) + 6,
+                                               y: 50 - 16 - (12 - 1) - 8)
         game.items[.spike(0)] = .init(x: 50, y: 50)
 
         XCTAssertNotNil(game.items[.foe(.lizard, npc)])

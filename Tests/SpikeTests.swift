@@ -46,8 +46,8 @@ final class SpikeTests: XCTestCase {
         let expectState = expectation(description: "")
         let expectFace = expectation(description: "")
         
-        game.items[.cornelius] = .init(x: 234 - (14 - 1) - 7,
-                                       y: 645 - 16 - (14 - 1) - 9)
+        game.items[.cornelius] = .init(x: 234 - (13 - 1) - 6,
+                                       y: 645 - 16 - (13 - 1) - 6)
         
         game
             .state

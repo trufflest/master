@@ -53,8 +53,8 @@ final class FoeTests: XCTestCase {
         let expectState = expectation(description: "")
         let expectFace = expectation(description: "")
         
-        game.items[.cornelius] = .init(x: 234 - (14 - 1) - 14,
-                                       y: 645 - (14 - 1) - 14)
+        game.items[.cornelius] = .init(x: 234 - (12 - 1) - 12,
+                                       y: 645 - (12 - 1) - 12)
         
         game
             .state
